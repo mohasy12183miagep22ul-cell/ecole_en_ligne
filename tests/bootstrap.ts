@@ -7,6 +7,7 @@ import testUtils from '@adonisjs/core/services/test_utils'
 import { apiClient } from '@japa/api-client'
 import { browserClient } from '@japa/browser-client'
 import { authApiClient } from '@adonisjs/auth/plugins/api_client'
+import { inertiaApiClient } from '@adonisjs/inertia/plugins/api_client'
 import { shieldApiClient } from '@adonisjs/shield/plugins/api_client'
 import { sessionApiClient } from '@adonisjs/session/plugins/api_client'
 import { authBrowserClient } from '@adonisjs/auth/plugins/browser_client'
@@ -28,6 +29,7 @@ export const plugins: Config['plugins'] = [
   sessionApiClient(app),
   shieldApiClient(),
   authApiClient(app),
+  inertiaApiClient(app),
   browserClient({ runInSuites: ['browser'] }),
   sessionBrowserClient(app),
   authBrowserClient(app),

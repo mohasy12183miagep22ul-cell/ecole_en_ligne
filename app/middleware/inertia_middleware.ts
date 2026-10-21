@@ -37,8 +37,12 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
 
     const success: string | undefined = session?.flashMessages.get('success')
     const error: string | undefined = session?.flashMessages.get('error')
+    // Mot de passe provisoire d'un compte qui vient d'être créé : affiché une
+    // seule fois à l'administrateur.
+    const compteCree: { email: string; motDePasse: string } | undefined =
+      session?.flashMessages.get('compteCree')
 
-    return { success, error }
+    return { success, error, compteCree }
   }
 
   async handle(ctx: HttpContext, next: NextFn) {

@@ -4,6 +4,8 @@
  */
 
 export const controllers = {
+  Comptes: () => import('#controllers/comptes_controller'),
+  Journal: () => import('#controllers/journal_controller'),
   MotDePasseOublie: () => import('#controllers/mot_de_passe_oublie_controller'),
   Profil: () => import('#controllers/profil_controller'),
   Session: () => import('#controllers/session_controller'),

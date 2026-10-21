@@ -1,4 +1,5 @@
 import vine from '@vinejs/vine'
+import { ROLES } from '#models/role_utilisateur'
 
 const email = () => vine.string().trim().toLowerCase().email().maxLength(254)
 
@@ -31,6 +32,15 @@ export const motDePasseOublieValidator = vine.create({
 })
 
 /**
+ * Nouveau mot de passe choisi depuis un lien de réinitialisation.
+ */
+export const reinitialiserValidator = vine.create({
+  nouveau: vine.string().minLength(LONGUEUR_MIN_MOT_DE_PASSE).maxLength(128).confirmed({
+    confirmationField: 'confirmation',
+  }),
+})
+
+/**
  * Changement de mot de passe par l'utilisateur connecté.
  */
 export const changerMotDePasseValidator = vine.create({
@@ -39,3 +49,27 @@ export const changerMotDePasseValidator = vine.create({
     confirmationField: 'confirmation',
   }),
 })
+
+const roles = () => vine.array(vine.enum(ROLES)).minLength(1).distinct()
+
+/**
+ * Création d'un compte par l'administrateur.
+ */
+export const creerCompteValidator = vine.create({
+  fullName: vine.string().trim().minLength(2).maxLength(120),
+  // Unicité sur tous les comptes, y compris supprimés logiquement : c'est la
+  // contrainte de la table, un e-mail ne sert qu'une fois.
+  email: email().unique({ table: 'users', column: 'email' }),
+  sousTitre: vine.string().trim().maxLength(120).optional(),
+  roles: roles(),
+})
+
+/**
+ * Rôles d'un compte existant.
+ */
+export const rolesCompteValidator = vine.create({ roles: roles() })
+
+/**
+ * Activation ou désactivation d'un compte.
+ */
+export const activationCompteValidator = vine.create({ actif: vine.boolean() })

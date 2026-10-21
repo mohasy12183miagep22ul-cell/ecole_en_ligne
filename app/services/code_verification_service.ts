@@ -1,5 +1,5 @@
 import { createHash, randomInt, timingSafeEqual } from 'node:crypto'
-import logger from '@adonisjs/core/services/logger'
+import MessagerieService from '#services/messagerie_service'
 import type { Session } from '@adonisjs/session'
 import type User from '#models/user'
 
@@ -18,11 +18,10 @@ const empreinte = (code: string) => createHash('sha256').update(code).digest('he
  */
 export default class CodeVerificationService {
   /**
-   * Génère et « envoie » un code. Tant que l'envoi de courriel n'est pas
-   * configuré, le code est écrit dans le journal applicatif ; il est aussi
-   * renvoyé pour être affiché hors production uniquement.
+   * Génère un code, l'envoie par courriel et le renvoie à l'appelant (qui ne
+   * l'affiche qu'en développement, quand aucun courriel ne part).
    */
-  static emettre(session: Session, user: User) {
+  static async emettre(session: Session, user: User) {
     const code = String(randomInt(0, 1_000_000)).padStart(6, '0')
     const attente: CodeEnAttente = {
       userId: user.id,
@@ -31,8 +30,12 @@ export default class CodeVerificationService {
       essais: 0,
     }
     session.put(CLE, attente)
-    // TODO envoi par courriel (@adonisjs/mail) quand le SMTP de l'établissement sera connu.
-    logger.info({ userId: user.id }, `Code de vérification pour ${user.email} : ${code}`)
+    await MessagerieService.envoyer({
+      a: user.email,
+      sujet: 'Votre code de vérification',
+      gabarit: 'code_verification',
+      donnees: { nom: user.fullName ?? user.email, code },
+    })
     return code
   }
 

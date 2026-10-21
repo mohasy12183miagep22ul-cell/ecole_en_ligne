@@ -1,4 +1,4 @@
-﻿/*
+/*
 |--------------------------------------------------------------------------
 | Routes
 |--------------------------------------------------------------------------
@@ -46,6 +46,12 @@ router
       .post('connexion/verification/renvoyer', [controllers.Session, 'renvoyerCode'])
       .as('double_facteur.renvoyer')
     router.post('mot-de-passe-oublie', [controllers.MotDePasseOublie, 'store'])
+    router
+      .get('reinitialiser/:jeton', [controllers.MotDePasseOublie, 'edit'])
+      .as('reinitialisation.edit')
+    router
+      .post('reinitialiser/:jeton', [controllers.MotDePasseOublie, 'update'])
+      .as('reinitialisation.update')
   })
   .use(middleware.guest())
 
@@ -128,14 +134,18 @@ router
   .group(() => {
     router.on('/').renderInertia('admin/accueil', {}).as('accueil')
     router.on('structure').renderInertia('admin/structure', {}).as('structure')
-    router.on('comptes').renderInertia('admin/comptes', {}).as('comptes')
+    router.get('comptes', [controllers.Comptes, 'index']).as('comptes')
+    router.post('comptes', [controllers.Comptes, 'store']).as('comptes.store')
+    router.put('comptes/:id/roles', [controllers.Comptes, 'updateRoles']).as('comptes.roles')
+    router
+      .put('comptes/:id/activation', [controllers.Comptes, 'updateActivation'])
+      .as('comptes.activation')
   })
   .prefix('admin')
   .as('admin')
   .use(espace(['admin']))
 
 router
-  .on('admin/journal')
-  .renderInertia('admin/journal', {})
+  .get('admin/journal', [controllers.Journal, 'index'])
   .as('admin.journal')
   .use(espace(['admin', 'direction']))

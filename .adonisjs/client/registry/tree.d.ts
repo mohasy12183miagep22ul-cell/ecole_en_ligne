@@ -17,6 +17,10 @@ export interface ApiDefinition {
     create: typeof routes['mot_de_passe_oublie.create']
     store: typeof routes['mot_de_passe_oublie.store']
   }
+  reinitialisation: {
+    edit: typeof routes['reinitialisation.edit']
+    update: typeof routes['reinitialisation.update']
+  }
   profil: typeof routes['profil'] & {
     motDePasse: typeof routes['profil.mot_de_passe']
   }
@@ -50,7 +54,11 @@ export interface ApiDefinition {
   admin: {
     accueil: typeof routes['admin.accueil']
     structure: typeof routes['admin.structure']
-    comptes: typeof routes['admin.comptes']
+    comptes: typeof routes['admin.comptes'] & {
+      store: typeof routes['admin.comptes.store']
+      roles: typeof routes['admin.comptes.roles']
+      activation: typeof routes['admin.comptes.activation']
+    }
     journal: typeof routes['admin.journal']
   }
 }

@@ -7,6 +7,33 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class JetonsReinitialisationSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'empreinte',
+    'expireLe',
+    'id',
+    'updatedAt',
+    'userId',
+    'utiliseLe',
+  ] as const
+  $columns = JetonsReinitialisationSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare empreinte: string
+  @column.dateTime()
+  declare expireLe: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+  @column.dateTime()
+  declare utiliseLe: DateTime | null
+}
+
 export class JournalSchema extends BaseModel {
   static $columns = [
     'action',

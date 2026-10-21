@@ -12,6 +12,8 @@ export type ScannedRoutes = {
     'mot_de_passe_oublie.create': { paramsTuple?: []; params?: {} }
     'double_facteur.renvoyer': { paramsTuple?: []; params?: {} }
     'mot_de_passe_oublie.store': { paramsTuple?: []; params?: {} }
+    'reinitialisation.edit': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
+    'reinitialisation.update': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profil': { paramsTuple?: []; params?: {} }
     'profil.mot_de_passe': { paramsTuple?: []; params?: {} }
@@ -37,6 +39,9 @@ export type ScannedRoutes = {
     'admin.accueil': { paramsTuple?: []; params?: {} }
     'admin.structure': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
+    'admin.comptes.store': { paramsTuple?: []; params?: {} }
+    'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.comptes.activation': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.journal': { paramsTuple?: []; params?: {} }
   }
   GET: {
@@ -44,6 +49,7 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'double_facteur.create': { paramsTuple?: []; params?: {} }
     'mot_de_passe_oublie.create': { paramsTuple?: []; params?: {} }
+    'reinitialisation.edit': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
     'profil': { paramsTuple?: []; params?: {} }
     'portail.accueil': { paramsTuple?: []; params?: {} }
     'portail.notes': { paramsTuple?: []; params?: {} }
@@ -74,6 +80,7 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'double_facteur.create': { paramsTuple?: []; params?: {} }
     'mot_de_passe_oublie.create': { paramsTuple?: []; params?: {} }
+    'reinitialisation.edit': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
     'profil': { paramsTuple?: []; params?: {} }
     'portail.accueil': { paramsTuple?: []; params?: {} }
     'portail.notes': { paramsTuple?: []; params?: {} }
@@ -104,8 +111,14 @@ export type ScannedRoutes = {
     'double_facteur.store': { paramsTuple?: []; params?: {} }
     'double_facteur.renvoyer': { paramsTuple?: []; params?: {} }
     'mot_de_passe_oublie.store': { paramsTuple?: []; params?: {} }
+    'reinitialisation.update': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profil.mot_de_passe': { paramsTuple?: []; params?: {} }
+    'admin.comptes.store': { paramsTuple?: []; params?: {} }
+  }
+  PUT: {
+    'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.comptes.activation': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

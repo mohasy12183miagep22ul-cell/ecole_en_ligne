@@ -54,6 +54,18 @@ const routes = {
     tokens: [[0,"mot-de-passe-oublie"]],
     types: placeholder as Registry['mot_de_passe_oublie.store']['types'],
   },
+  'reinitialisation.edit': {
+    methods: ["GET","HEAD"],
+    pattern: '/reinitialiser/:jeton',
+    tokens: [[0,"reinitialiser"],[1,"jeton"]],
+    types: placeholder as Registry['reinitialisation.edit']['types'],
+  },
+  'reinitialisation.update': {
+    methods: ["POST"],
+    pattern: '/reinitialiser/:jeton',
+    tokens: [[0,"reinitialiser"],[1,"jeton"]],
+    types: placeholder as Registry['reinitialisation.update']['types'],
+  },
   'session.destroy': {
     methods: ["POST"],
     pattern: '/logout',
@@ -203,6 +215,24 @@ const routes = {
     pattern: '/admin/comptes',
     tokens: [[0,"admin"],[0,"comptes"]],
     types: placeholder as Registry['admin.comptes']['types'],
+  },
+  'admin.comptes.store': {
+    methods: ["POST"],
+    pattern: '/admin/comptes',
+    tokens: [[0,"admin"],[0,"comptes"]],
+    types: placeholder as Registry['admin.comptes.store']['types'],
+  },
+  'admin.comptes.roles': {
+    methods: ["PUT"],
+    pattern: '/admin/comptes/:id/roles',
+    tokens: [[0,"admin"],[0,"comptes"],[1,"id"],[0,"roles"]],
+    types: placeholder as Registry['admin.comptes.roles']['types'],
+  },
+  'admin.comptes.activation': {
+    methods: ["PUT"],
+    pattern: '/admin/comptes/:id/activation',
+    tokens: [[0,"admin"],[0,"comptes"],[1,"id"],[0,"activation"]],
+    types: placeholder as Registry['admin.comptes.activation']['types'],
   },
   'admin.journal': {
     methods: ["GET","HEAD"],

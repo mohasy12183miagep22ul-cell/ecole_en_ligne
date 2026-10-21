@@ -111,6 +111,32 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
+  'reinitialisation.edit': {
+    methods: ["GET","HEAD"]
+    pattern: '/reinitialiser/:jeton'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { jeton: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['edit']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['edit']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['edit']>>>
+    }
+  }
+  'reinitialisation.update': {
+    methods: ["POST"]
+    pattern: '/reinitialiser/:jeton'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').reinitialiserValidator)>>
+      paramsTuple: [ParamValue]
+      params: { jeton: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').reinitialiserValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/mot_de_passe_oublie_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'session.destroy': {
     methods: ["POST"]
     pattern: '/logout'
@@ -431,9 +457,48 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['index']>>>
+    }
+  }
+  'admin.comptes.store': {
+    methods: ["POST"]
+    pattern: '/admin/comptes'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').creerCompteValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').creerCompteValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.comptes.roles': {
+    methods: ["PUT"]
+    pattern: '/admin/comptes/:id/roles'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').rolesCompteValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').rolesCompteValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['updateRoles']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['updateRoles']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['updateRoles']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.comptes.activation': {
+    methods: ["PUT"]
+    pattern: '/admin/comptes/:id/activation'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/user').activationCompteValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/user').activationCompteValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['updateActivation']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['updateActivation']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/comptes_controller').default['updateActivation']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'admin.journal': {
@@ -444,9 +509,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/journal_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/journal_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/journal_controller').default['index']>>>
     }
   }
 }

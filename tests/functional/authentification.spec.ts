@@ -1,5 +1,6 @@
 import { test } from '@japa/runner'
 import User from '#models/user'
+import mail from '@adonisjs/mail/services/main'
 import EntreeJournal from '#models/entree_journal'
 import testUtils from '@adonisjs/core/services/test_utils'
 import { MAX_ECHECS } from '#services/authentification_service'
@@ -10,6 +11,11 @@ const connexion = (client: any, email: string, password: string) =>
 
 test.group('Authentification · connexion', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
+  // Aucun courriel réel en test : le code du second facteur est intercepté.
+  group.each.setup(() => {
+    mail.fake()
+    return () => mail.restore()
+  })
 
   test('un tuteur arrive sur le portail famille', async ({ client }) => {
     const user = await creerCompte(['tuteur'])

@@ -1,9 +1,16 @@
-﻿import User from '#models/user'
+import User from '#models/user'
 import app from '@adonisjs/core/services/app'
 import AuthentificationService from '#services/authentification_service'
 import CodeVerificationService from '#services/code_verification_service'
+import MessagerieService from '#services/messagerie_service'
 import { codeValidator, loginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
+
+/**
+ * Le code n'est affiché à l'écran qu'en développement sans envoi réel de
+ * courriel ; jamais en production, quelle que soit la configuration.
+ */
+const afficherCode = () => !app.inProduction && !MessagerieService.envoiReel
 
 const MESSAGE_IDENTIFIANTS = 'Adresse e-mail ou mot de passe incorrect.'
 
@@ -32,8 +39,8 @@ export default class SessionController {
 
     const user = resultat.user
     if (user.doubleFacteur) {
-      const code = CodeVerificationService.emettre(session, user)
-      if (!app.inProduction) session.flash('codeDeveloppement', code)
+      const code = await CodeVerificationService.emettre(session, user)
+      if (afficherCode()) session.flash('codeDeveloppement', code)
       return response.redirect('/connexion/verification')
     }
 
@@ -56,7 +63,7 @@ export default class SessionController {
     if (!user) return response.redirect().toRoute('session.create')
 
     // Hors production, aucun courriel n'est envoyé : le code est affiché.
-    const codeDeveloppement = app.inProduction
+    const codeDeveloppement = !afficherCode()
       ? null
       : ((session.flashMessages.get('codeDeveloppement') as string | undefined) ?? null)
     return inertia.render('auth/double_facteur', { email: user.email, codeDeveloppement })
@@ -93,8 +100,8 @@ export default class SessionController {
     const user = attente ? await User.find(attente.userId) : null
     if (!user) return response.redirect().toRoute('session.create')
 
-    const code = CodeVerificationService.emettre(session, user)
-    if (!app.inProduction) session.flash('codeDeveloppement', code)
+    const code = await CodeVerificationService.emettre(session, user)
+    if (afficherCode()) session.flash('codeDeveloppement', code)
     return response.redirect().back()
   }
 }

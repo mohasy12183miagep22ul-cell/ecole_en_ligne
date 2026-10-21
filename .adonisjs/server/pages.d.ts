@@ -20,6 +20,7 @@ declare module '@adonisjs/inertia/types' {
     'auth/double_facteur': ExtractProps<(typeof import('../../inertia/pages/auth/double_facteur.tsx'))['default']>
     'auth/lien_envoye': ExtractProps<(typeof import('../../inertia/pages/auth/lien_envoye.tsx'))['default']>
     'auth/mot_de_passe_oublie': ExtractProps<(typeof import('../../inertia/pages/auth/mot_de_passe_oublie.tsx'))['default']>
+    'auth/reinitialiser': ExtractProps<(typeof import('../../inertia/pages/auth/reinitialiser.tsx'))['default']>
     'direction/accueil': ExtractProps<(typeof import('../../inertia/pages/direction/accueil.tsx'))['default']>
     'direction/bulletins': ExtractProps<(typeof import('../../inertia/pages/direction/bulletins.tsx'))['default']>
     'direction/deliberation': ExtractProps<(typeof import('../../inertia/pages/direction/deliberation.tsx'))['default']>
