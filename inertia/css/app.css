@@ -1,0 +1,182 @@
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Jetons de design — issus du prototype « Ecole en ligne.dc.html ».
+   Ce bloc est le seul endroit où une couleur, un rayon ou une ombre est écrit.
+   ========================================================================== */
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+
+  /* Texte */
+  --color-encre: #1b1726;
+  --color-encre-2: #3b3747;
+  --color-encre-3: #5e5a6b;
+  --color-encre-4: #77738a;
+  --color-encre-nav: #4e4a5c;
+
+  /* Fonds */
+  --color-page: #f6f5fa;
+  --color-carte: #ffffff;
+  --color-champ: #f7f6fa;
+  --color-entete: #f8f7fb;
+  --color-neutre: #f1f0f5;
+  --color-neutre-2: #ecebf2;
+  --color-bandeau: #fbfafd;
+
+  /* Bordures */
+  --color-bordure: #eceaf2;
+  --color-bordure-champ: #e6e3ee;
+  --color-bordure-forte: #bdb8cc;
+  --color-separateur: #f1f0f5;
+
+  /* États : toujours par paire texte / fond */
+  --color-succes: #14663f;
+  --color-succes-fond: #e2f4ea;
+  --color-attention: #7a4a00;
+  --color-attention-fond: #fff3dd;
+  --color-erreur: #a3214f;
+  --color-erreur-fond: #fce8ef;
+  --color-info: #2448b5;
+  --color-info-fond: #eaf0fd;
+  --color-danger: #c42f2f;
+  --color-erreur-champ: #fdecec;
+  --color-info-fort: #1f3e99;
+  --color-verrou: #2f2b3a;
+  --color-verrou-fond: #e8e6ef;
+  --color-bordure-moyenne: #ddd9e6;
+  --color-pointille: #cfcbda;
+  --color-bordure-danger: #f3c9d6;
+  --color-evolution: #cfe8e2;
+  --color-barre-alerte: #e7a13a;
+  --color-barre-ok: #1f9d5c;
+  --color-toast-ok: #7ee0b5;
+  --color-cadre: #e9e7f0;
+  --color-gris-icone: #8a869a;
+
+  /* Avatars : paires fond / texte */
+  --color-av1-fond: #f3ecfd;
+  --color-av1: #6a1fd0;
+  --color-av2-fond: #e3f3ef;
+  --color-av2: #0b6a5b;
+  --color-av3-fond: #eaf0fd;
+  --color-av3: #2448b5;
+  --color-av4-fond: #fdede3;
+  --color-av4: #9a4510;
+  --color-av5-fond: #fce8ef;
+  --color-av5: #a3214f;
+
+
+  /* Rayons */
+  --radius-champ: 10px;
+  --radius-bouton: 12px;
+  --radius-carte: 16px;
+
+  /* Tailles de texte */
+  --text-micro: 11px;
+  --text-leg: 12px;
+  --text-meta: 13px;
+  --text-corps: 14px;
+  --text-moyen: 15px;
+  --text-titre-carte: 16px;
+  --text-section: 17px;
+  --text-section-lg: 20px;
+  --text-ecran: 26px;
+
+  /* Ombres réservées aux éléments flottants */
+  --shadow-barre: 0 -6px 20px rgba(27, 23, 38, 0.06);
+  --shadow-flottant: 0 10px 24px rgba(27, 23, 38, 0.22);
+  --shadow-feuille: 0 20px 50px rgba(27, 23, 38, 0.18);
+  --shadow-onglet: 0 1px 3px rgba(27, 23, 38, 0.12);
+
+  --breakpoint-lg: 1024px;
+}
+
+/* Accent : change selon l'environnement (voir [data-env] plus bas). `inline`
+   fait pointer les utilitaires directement sur --acc, résolu là où data-env
+   est posé, au lieu d'une valeur figée sur :root. */
+@theme inline {
+  --color-accent: var(--acc);
+  --color-accent-doux: var(--acc-soft);
+  --color-accent-fort: var(--acc-strong);
+}
+
+/* Hauteur de la barre d'onglets basse (mobile) : réservée au contenu, aux barres
+   collantes et au bouton flottant. Nulle sur bureau, où la navigation est latérale. */
+:root {
+  --nav: calc(4rem + env(safe-area-inset-bottom));
+}
+@media (min-width: 1024px) {
+  :root {
+    --nav: 0px;
+  }
+}
+
+:root,
+[data-env='admin'] {
+  --acc: #7424e0;
+  --acc-soft: #f3ecfd;
+  --acc-strong: #5a16b8;
+}
+[data-env='portail'] {
+  --acc: #0e7c6b;
+  --acc-soft: #e3f3ef;
+  --acc-strong: #0a6153;
+}
+[data-env='enseignant'] {
+  --acc: #2b59d9;
+  --acc-soft: #eaf0fd;
+  --acc-strong: #1f44ac;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+    background: var(--color-page);
+    color: var(--color-encre);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    overflow-x: hidden;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+  button {
+    cursor: pointer;
+  }
+  a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+  a:hover {
+    color: var(--color-accent-fort);
+    text-decoration: underline;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+  /* Évite le zoom automatique d'iOS sur les champs : 16 px minimum en mobile. */
+  @media (max-width: 1023px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
+  }
+}
+
+@utility scroll-masque {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
