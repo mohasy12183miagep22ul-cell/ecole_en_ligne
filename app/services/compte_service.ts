@@ -38,7 +38,8 @@ export default class CompteService {
 
   static async creer(
     donnees: { fullName: string; email: string; sousTitre?: string | null; roles: Role[] },
-    auteur: Auteur
+    /** `null` : création hors application (commande d'installation). */
+    auteur: Auteur | null
   ) {
     const motDePasse = motDePasseProvisoire()
     const user = await db.transaction(async (trx) => {
@@ -61,12 +62,12 @@ export default class CompteService {
       )
       await JournalService.enregistrer(
         {
-          userId: auteur.id,
+          userId: auteur?.id ?? null,
           action: 'Création de compte',
           entite: 'users',
           entiteId: u.id,
           apres: { email: u.email, roles: donnees.roles },
-          ip: auteur.ip,
+          ip: auteur?.ip ?? null,
         },
         trx
       )

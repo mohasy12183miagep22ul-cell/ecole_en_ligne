@@ -17,6 +17,7 @@ declare module '@adonisjs/inertia/types' {
     'admin/annees': ExtractProps<(typeof import('../../inertia/pages/admin/annees.tsx'))['default']>
     'admin/classes': ExtractProps<(typeof import('../../inertia/pages/admin/classes.tsx'))['default']>
     'admin/comptes': ExtractProps<(typeof import('../../inertia/pages/admin/comptes.tsx'))['default']>
+    'admin/etablissement': ExtractProps<(typeof import('../../inertia/pages/admin/etablissement.tsx'))['default']>
     'admin/journal': ExtractProps<(typeof import('../../inertia/pages/admin/journal.tsx'))['default']>
     'admin/structure': ExtractProps<(typeof import('../../inertia/pages/admin/structure.tsx'))['default']>
     'auth/connexion': ExtractProps<(typeof import('../../inertia/pages/auth/connexion.tsx'))['default']>
@@ -27,7 +28,9 @@ declare module '@adonisjs/inertia/types' {
     'direction/accueil': ExtractProps<(typeof import('../../inertia/pages/direction/accueil.tsx'))['default']>
     'direction/bulletins': ExtractProps<(typeof import('../../inertia/pages/direction/bulletins.tsx'))['default']>
     'direction/deliberation': ExtractProps<(typeof import('../../inertia/pages/direction/deliberation.tsx'))['default']>
+    'direction/inscriptions': ExtractProps<(typeof import('../../inertia/pages/direction/inscriptions.tsx'))['default']>
     'direction/validation': ExtractProps<(typeof import('../../inertia/pages/direction/validation.tsx'))['default']>
+    'documents': ExtractProps<(typeof import('../../inertia/pages/documents.tsx'))['default']>
     'enseignant/appreciations': ExtractProps<(typeof import('../../inertia/pages/enseignant/appreciations.tsx'))['default']>
     'enseignant/classes': ExtractProps<(typeof import('../../inertia/pages/enseignant/classes.tsx'))['default']>
     'enseignant/evaluations': ExtractProps<(typeof import('../../inertia/pages/enseignant/evaluations.tsx'))['default']>
@@ -45,6 +48,7 @@ declare module '@adonisjs/inertia/types' {
     'scolarite/dossiers': ExtractProps<(typeof import('../../inertia/pages/scolarite/dossiers.tsx'))['default']>
     'scolarite/eleves': ExtractProps<(typeof import('../../inertia/pages/scolarite/eleves.tsx'))['default']>
     'scolarite/fiche': ExtractProps<(typeof import('../../inertia/pages/scolarite/fiche.tsx'))['default']>
+    'scolarite/import': ExtractProps<(typeof import('../../inertia/pages/scolarite/import.tsx'))['default']>
     'scolarite/inscription': ExtractProps<(typeof import('../../inertia/pages/scolarite/inscription.tsx'))['default']>
   }
 }

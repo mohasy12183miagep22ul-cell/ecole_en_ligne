@@ -11,38 +11,37 @@ import db from '@adonisjs/lucid/services/db'
 import { BaseSeeder } from '@adonisjs/lucid/seeders'
 
 /**
- * Structure pédagogique du prototype : 2025-2026 clôturée, 2026-2027 active
- * (trimestres), niveaux 6e à 3e, 7 matières et leurs coefficients par niveau,
- * 7 classes, affectations des enseignants de la 3e A. Idempotent.
+ * Structure de démonstration (consigne du projet : 1 année, 3 niveaux,
+ * 6 classes) : 2026-2027 active en trimestres, niveaux 6e, 4e et 3e (ceux du
+ * prototype), 7 matières et leurs coefficients par niveau, 2 classes par
+ * niveau, affectations des enseignants. Idempotent.
  * S'exécute après comptes_demo_seeder (ordre alphabétique).
  */
 const NIVEAUX: Array<[string, string, number]> = [
   ['6E', '6e', 1],
-  ['5E', '5e', 2],
   ['4E', '4e', 3],
   ['3E', '3e', 4],
 ]
 
-/** Code, libellé, famille et coefficients 6e → 3e (prototype). */
+/** Code, libellé, famille et coefficients 6e, 4e, 3e (prototype). */
 const MATIERES: Array<[string, string, Famille, number[]]> = [
-  ['FR', 'Français', 'litteraire', [4, 4, 4, 4]],
-  ['MA', 'Mathématiques', 'scientifique', [4, 4, 4, 4]],
-  ['AN', 'Anglais', 'langue', [2, 2, 2, 2]],
-  ['HG', 'Histoire-Géographie', 'litteraire', [2, 2, 3, 3]],
-  ['SVT', 'SVT', 'scientifique', [2, 2, 2, 2]],
-  ['PC', 'Physique-Chimie', 'scientifique', [1, 1, 2, 2]],
-  ['EPS', 'EPS', 'sportive', [1, 1, 1, 1]],
+  ['FR', 'Français', 'litteraire', [4, 4, 4]],
+  ['MA', 'Mathématiques', 'scientifique', [4, 4, 4]],
+  ['AN', 'Anglais', 'langue', [2, 2, 2]],
+  ['HG', 'Histoire-Géographie', 'litteraire', [2, 3, 3]],
+  ['SVT', 'SVT', 'scientifique', [2, 2, 2]],
+  ['PC', 'Physique-Chimie', 'scientifique', [1, 2, 2]],
+  ['EPS', 'EPS', 'sportive', [1, 1, 1]],
 ]
 
 /** Classe, niveau, capacité, salle. */
 const CLASSES: Array<[string, string, number, string]> = [
   ['6e A', '6E', 40, 'Salle 1'],
   ['6e B', '6E', 40, 'Salle 2'],
-  ['5e A', '5E', 40, 'Salle 3'],
-  ['5e B', '5E', 40, 'Salle 4'],
-  ['4e A', '4E', 40, 'Salle 5'],
-  ['3e A', '3E', 40, 'Salle 6'],
-  ['3e B', '3E', 40, 'Salle 7'],
+  ['4e A', '4E', 40, 'Salle 3'],
+  ['4e B', '4E', 40, 'Salle 4'],
+  ['3e A', '3E', 40, 'Salle 5'],
+  ['3e B', '3E', 40, 'Salle 6'],
 ]
 
 /** Enseignant (identifiant), classes, matière. */
@@ -85,11 +84,6 @@ export default class extends BaseSeeder {
         return a
       }
 
-      await annee('2025-2026', '2025-09-01', '2026-06-30', 'cloturee', [
-        ['1er trimestre', '2025-09-01', '2025-12-15'],
-        ['2e trimestre', '2026-01-05', '2026-03-27'],
-        ['3e trimestre', '2026-04-06', '2026-06-26'],
-      ])
       const active = await annee('2026-2027', '2026-09-01', '2027-06-30', 'active', [
         ['1er trimestre', '2026-09-01', '2026-12-15'],
         ['2e trimestre', '2027-01-05', '2027-03-27'],

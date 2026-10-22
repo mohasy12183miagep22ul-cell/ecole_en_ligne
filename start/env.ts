@@ -41,4 +41,13 @@ export default await Env.create(new URL('../', import.meta.url), {
   SMTP_SECURE: Env.schema.boolean.optional(),
   SMTP_USERNAME: Env.schema.string.optional(),
   SMTP_PASSWORD: Env.schema.secret.optional(),
+
+  // Stockage des fichiers (pièces jointes, photos, PDF générés)
+  DRIVE_DISK: Env.schema.enum(['fs'] as const),
+
+  // File d'attente des traitements lourds (PDF, exports, générations de masse)
+  QUEUE_DRIVER: Env.schema.enum(['database', 'sync'] as const),
+
+  // Conversion HTML → PDF : chemin d'un Chromium ou Chrome (sinon Chrome installé)
+  PDF_NAVIGATEUR: Env.schema.string.optional(),
 })

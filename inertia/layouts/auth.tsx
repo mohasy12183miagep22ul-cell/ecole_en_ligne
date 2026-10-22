@@ -1,7 +1,7 @@
 import Logo from '~/components/logo'
 import Toasts from '~/components/ui/toast'
 import { type ReactNode } from 'react'
-import { Head } from '@inertiajs/react'
+import { Head, usePage } from '@inertiajs/react'
 import apprentissage from '~/assets/illustrations/online-learning_tgmv.svg'
 
 export type AccentAuth = 'portail' | 'enseignant' | 'admin'
@@ -21,6 +21,7 @@ export default function AuthLayout({
   accent?: AccentAuth
   children: ReactNode
 }) {
+  const { props } = usePage()
   return (
     <div
       data-env={accent}
@@ -33,7 +34,7 @@ export default function AuthLayout({
             <Logo taille={40} nom={false} className="text-[18px]" />
             <div className="flex flex-col">
               <span className="text-[18px] font-extrabold tracking-[-0.01em]">École en ligne</span>
-              <span className="text-leg text-encre-3">Groupe scolaire Les Flamboyants</span>
+              <span className="text-leg text-encre-3">{props.etablissement?.nom}</span>
             </div>
           </div>
           <div className="flex justify-center rounded-3xl bg-accent-doux p-5">

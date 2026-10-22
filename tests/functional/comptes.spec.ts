@@ -1,7 +1,9 @@
 import { test } from '@japa/runner'
 import User from '#models/user'
 import EntreeJournal from '#models/entree_journal'
+import ace from '@adonisjs/core/services/ace'
 import testUtils from '@adonisjs/core/services/test_utils'
+import CreerAdministrateur from '#commands/creer_administrateur'
 import { creerCompte } from '#tests/aides'
 
 const trace = (action: string, entiteId: number) =>
@@ -150,5 +152,35 @@ test.group('Journal d’activité (écran)', (group) => {
     reponse.assertInertiaPropsContains({
       entrees: [{ action: 'Création de compte' }],
     })
+  })
+})
+
+test.group('Installation · premier administrateur', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('la commande crée un administrateur à mot de passe provisoire, journalisé', async ({
+    assert,
+  }) => {
+    const commande = await ace.create(CreerAdministrateur, [
+      '--nom=Kadiatou Barry',
+      '--email=Direction.Info@ecole.gn',
+    ])
+    await commande.exec()
+    commande.assertSucceeded()
+
+    const user = await User.findByOrFail('email', 'direction.info@ecole.gn')
+    await user.load('rolesUtilisateur')
+    assert.isTrue(user.aLeRole('admin'))
+    assert.isTrue(user.doitChangerMotDePasse)
+    assert.isTrue(user.doubleFacteur)
+    assert.exists(await trace('Création de compte', user.id))
+
+    const doublon = await ace.create(CreerAdministrateur, [
+      '--nom=Autre',
+      '--email=direction.info@ecole.gn',
+    ])
+    await doublon.exec()
+    commande.assertSucceeded()
+    assert.equal(doublon.exitCode, 1)
   })
 })

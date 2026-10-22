@@ -95,3 +95,24 @@ export const affectationValidator = vine.create({
 
 /** Duplication d'une année : la nouvelle année cible. */
 export const dupliquerAnneeValidator = creerAnneeValidator
+
+const texteFacultatif = (max: number) => vine.string().trim().maxLength(max).nullable().optional()
+
+/** Paramètres de l'établissement. */
+export const etablissementValidator = vine.create({
+  nom: vine.string().trim().minLength(2).maxLength(120),
+  adresse: texteFacultatif(200),
+  ville: texteFacultatif(80),
+  pays: texteFacultatif(80),
+  telephone: texteFacultatif(30),
+  email: vine.string().trim().email().maxLength(254).nullable().optional(),
+  chefEtablissement: texteFacultatif(120),
+  titreChef: vine.string().trim().minLength(2).maxLength(80),
+})
+
+/** Matière obligatoire ou facultative dans le programme d'un niveau. */
+export const obligatoireValidator = vine.create({
+  niveauId: vine.number().withoutDecimals().positive(),
+  matiereId: vine.number().withoutDecimals().positive(),
+  obligatoire: vine.boolean(),
+})

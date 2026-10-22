@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 import UserTransformer from '#transformers/user_transformer'
+import EtablissementService from '#services/etablissement_service'
 import BaseInertiaMiddleware from '@adonisjs/inertia/inertia_middleware'
 
 export default class InertiaMiddleware extends BaseInertiaMiddleware {
@@ -21,9 +22,12 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
      * Données partagées avec toutes les pages. Toujours passer par un
      * transformer pour un modèle.
      */
+    const parametres = await EtablissementService.parametres()
     return {
       errors: ctx.inertia.always(this.getValidationErrors(ctx)),
       user: ctx.inertia.always(auth?.user ? UserTransformer.transform(auth.user) : undefined),
+      // Nom de l'établissement (en-têtes, écran de connexion).
+      etablissement: ctx.inertia.always({ nom: parametres.nom }),
       // Année active, présente dans chaque page (null entre deux années).
       anneeActive: ctx.inertia.always(
         ctx.anneeActive ? { id: ctx.anneeActive.id, libelle: ctx.anneeActive.libelle } : null

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Certificats de scolarité</title>
+  @include('pdf/_style')
+  <style>
+    .corps { font-size: 12pt; line-height: 1.8; margin-top: 30px; }
+    .signature { margin-top: 60px; text-align: right; }
+    .reference { margin-top: 40px; font-size: 9pt; color: #5E5A6B; }
+  </style>
+</head>
+<body>
+  @each((e, index) in eleves)
+    <div class="{{ index < eleves.length - 1 ? 'saut' : '' }}">
+      @include('pdf/_entete')
+      <h1 style="text-align:center">CERTIFICAT DE SCOLARITÉ</h1>
+      <div class="corps">
+        <p>
+          Je soussigné(e), {{ etablissement.chefEtablissement || '…………………………' }},
+          {{ etablissement.titreChef }} de {{ etablissement.nom }}, certifie que
+          l’élève <strong>{{ e.nomComplet }}</strong>,
+          {{ e.sexe === 'F' ? 'née' : 'né' }} le {{ e.naissance }} à {{ e.lieu_naissance }},
+          matricule <strong>{{ e.matricule }}</strong>,
+          est {{ e.sexe === 'F' ? 'inscrite' : 'inscrit' }} dans l’établissement en classe de
+          <strong>{{ e.classe }}</strong> pour l’année scolaire <strong>{{ e.annee }}</strong>.
+        </p>
+        <p>Le présent certificat est délivré pour servir et valoir ce que de droit.</p>
+      </div>
+      <div class="signature">
+        <div>Fait à {{ etablissement.ville || '…………' }}, le {{ date }}</div>
+        <div style="margin-top:8px">{{ etablissement.titreChef }}</div>
+        <div style="margin-top:50px">{{ etablissement.chefEtablissement || '' }}</div>
+      </div>
+      <div class="reference">Document édité par École en ligne · matricule {{ e.matricule }}</div>
+    </div>
+  @end
+</body>
+</html>

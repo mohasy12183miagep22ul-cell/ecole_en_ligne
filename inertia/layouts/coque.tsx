@@ -2,10 +2,10 @@ import Logo from '~/components/logo'
 import Icone from '~/components/ui/icone'
 import Toasts, { notifier } from '~/components/ui/toast'
 import { cx } from '~/lib/format'
-import { espaces, estActif, type Espace } from '~/lib/navigation'
+import { espaces, estActif, type ElementNav, type Espace } from '~/lib/navigation'
 import { Form, Link } from '@adonisjs/inertia/react'
 import { Head, usePage } from '@inertiajs/react'
-import { type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 
 type Props = {
   espace: Espace
@@ -27,6 +27,93 @@ type Props = {
  * La page occupe exactement la hauteur de l'écran et seul le contenu défile :
  * les barres collantes (ex. synthèse de la grille de notes) restent visibles.
  */
+const MAX_ONGLETS = 5
+
+/**
+ * Barre d'onglets mobile. Au-delà de 5 entrées, les 4 premières restent
+ * visibles et les autres s'ouvrent depuis « Plus ».
+ */
+function BarreOnglets({
+  elements,
+  estCourant,
+}: {
+  elements: ElementNav[]
+  estCourant: (el: ElementNav) => boolean
+}) {
+  const [plusOuvert, setPlusOuvert] = useState(false)
+  const deborde = elements.length > MAX_ONGLETS
+  const visibles = deborde ? elements.slice(0, MAX_ONGLETS - 1) : elements
+  const autres = deborde ? elements.slice(MAX_ONGLETS - 1) : []
+  const autreCourant = autres.some(estCourant)
+  const onglet = (actif: boolean) =>
+    cx(
+      'flex h-[52px] min-w-0 flex-1 flex-col items-center justify-center gap-1 text-micro hover:no-underline',
+      actif
+        ? 'font-bold text-accent hover:text-accent'
+        : 'font-medium text-encre-4 hover:text-encre-4'
+    )
+
+  return (
+    <>
+      {plusOuvert && (
+        <div className="absolute inset-0 z-40 lg:hidden" onClick={() => setPlusOuvert(false)}>
+          <nav
+            aria-label="Autres rubriques"
+            onClick={(e) => e.stopPropagation()}
+            className="absolute right-2 bottom-[76px] flex min-w-[220px] flex-col rounded-carte border border-bordure bg-white p-1.5 shadow-flottant"
+          >
+            {autres.map((el) => (
+              <Link
+                key={el.href}
+                href={el.href}
+                aria-current={estCourant(el) ? 'page' : undefined}
+                onClick={() => setPlusOuvert(false)}
+                className={cx(
+                  'flex h-11 items-center gap-3 rounded-champ px-3 text-corps hover:no-underline',
+                  estCourant(el)
+                    ? 'bg-accent-doux font-bold text-accent hover:text-accent'
+                    : 'font-medium text-encre-nav hover:text-encre-nav'
+                )}
+              >
+                <Icone nom={el.icone} className="w-[18px]" />
+                {el.libelle}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
+      <nav
+        aria-label="Navigation principale"
+        className="flex shrink-0 border-t border-bordure bg-carte px-1 pt-1.5 pb-[max(10px,env(safe-area-inset-bottom))] lg:hidden"
+      >
+        {visibles.map((el) => (
+          <Link
+            key={el.href}
+            href={el.href}
+            aria-current={estCourant(el) ? 'page' : undefined}
+            className={onglet(estCourant(el))}
+          >
+            <Icone nom={el.icone} className="text-[18px]" />
+            <span className="max-w-full truncate">{el.libelle}</span>
+          </Link>
+        ))}
+        {deborde && (
+          <button
+            type="button"
+            aria-expanded={plusOuvert}
+            aria-haspopup="true"
+            onClick={() => setPlusOuvert((v) => !v)}
+            className={onglet(autreCourant || plusOuvert)}
+          >
+            <Icone nom="ellipsis" className="text-[18px]" />
+            <span>Plus</span>
+          </button>
+        )}
+      </nav>
+    </>
+  )
+}
+
 export default function Coque({ espace, titre, retour, action, children }: Props) {
   const config = espaces[espace]
   const { url, props } = usePage()
@@ -157,33 +244,14 @@ export default function Coque({ espace, titre, retour, action, children }: Props
           </div>
         </main>
 
-        {/* Barre d'onglets basse — mobile */}
-        <nav
-          aria-label="Navigation principale"
-          className="flex shrink-0 border-t border-bordure bg-carte px-1 pt-1.5 pb-[max(10px,env(safe-area-inset-bottom))] lg:hidden"
-        >
-          {config.nav.map((el) => {
-            const actif =
-              estActif(url, el) ||
-              (retour !== undefined && retour.surligner !== false && retour.href === el.href)
-            return (
-              <Link
-                key={el.href}
-                href={el.href}
-                aria-current={actif ? 'page' : undefined}
-                className={cx(
-                  'flex h-[52px] min-w-0 flex-1 flex-col items-center justify-center gap-1 text-micro hover:no-underline',
-                  actif
-                    ? 'font-bold text-accent hover:text-accent'
-                    : 'font-medium text-encre-4 hover:text-encre-4'
-                )}
-              >
-                <Icone nom={el.icone} className="text-[18px]" />
-                <span className="max-w-full truncate">{el.libelle}</span>
-              </Link>
-            )
-          })}
-        </nav>
+        {/* Barre d'onglets basse — mobile : 5 entrées au plus, le reste sous « Plus » */}
+        <BarreOnglets
+          elements={config.nav}
+          estCourant={(el) =>
+            estActif(url, el) ||
+            (retour !== undefined && retour.surligner !== false && retour.href === el.href)
+          }
+        />
       </div>
 
       {/* Action principale — bouton flottant, mobile */}

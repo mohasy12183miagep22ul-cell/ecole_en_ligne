@@ -3,9 +3,11 @@
 | Routes
 |--------------------------------------------------------------------------
 |
-| Tant que les services métier n'existent pas, les écrans sont rendus sans
-| données serveur : les pages lisent le jeu de démonstration du prototype
-| (inertia/demo). Chaque espace est fermé aux autres rôles.
+| Les lots livrés (comptes, structure, scolarité) passent par leurs
+| contrôleurs ; les écrans des lots suivants (notes, délibération, bulletins,
+| portail) lisent encore le jeu de démonstration du prototype (inertia/demo).
+| Chaque espace est fermé aux autres rôles ; la policy de chaque ressource
+| autorise ensuite l'action.
 |
 */
 
@@ -107,6 +109,13 @@ router
     router.on('validation').renderInertia('direction/validation', {}).as('validation')
     router.on('deliberation').renderInertia('direction/deliberation', {}).as('deliberation')
     router.on('bulletins').renderInertia('direction/bulletins', {}).as('bulletins')
+    router.get('inscriptions', [controllers.ValidationInscriptions, 'index']).as('inscriptions')
+    router
+      .post('inscriptions/:id/valider', [controllers.ValidationInscriptions, 'valider'])
+      .as('inscriptions.valider')
+    router
+      .post('inscriptions/:id/refuser', [controllers.ValidationInscriptions, 'refuser'])
+      .as('inscriptions.refuser')
   })
   .prefix('direction')
   .as('direction')
@@ -114,21 +123,70 @@ router
 
 router
   .group(() => {
-    router.on('eleves').renderInertia('scolarite/eleves', {}).as('eleves')
+    router.get('eleves', [controllers.Eleves, 'index']).as('eleves')
+    router.get('eleves/:id', [controllers.Eleves, 'show']).as('fiche')
+    router.put('eleves/:id', [controllers.Eleves, 'update']).as('eleves.update')
+    router.post('eleves/:id/statut', [controllers.Eleves, 'statut']).as('eleves.statut')
+    router.post('eleves/:id/reactiver', [controllers.Eleves, 'reactiver']).as('eleves.reactiver')
+    router.get('eleves/:id/photo', [controllers.Eleves, 'photo']).as('eleves.photo')
+
+    router.post('eleves/:id/tuteurs', [controllers.Tuteurs, 'store']).as('tuteurs.store')
     router
-      .get('eleves/:id', ({ inertia, params, request }) =>
-        inertia.render('scolarite/fiche', {
-          id: String(params.id),
-          onglet: String(request.qs().onglet ?? 'id'),
-        })
-      )
-      .as('fiche')
-    router.on('inscription').renderInertia('scolarite/inscription', {}).as('inscription')
-    router.on('dossiers').renderInertia('scolarite/dossiers', {}).as('dossiers')
+      .post('eleves/:id/tuteurs/:tuteurId/rattacher', [controllers.Tuteurs, 'rattacher'])
+      .as('tuteurs.rattacher')
+    router.put('eleves/:id/tuteurs/:tuteurId', [controllers.Tuteurs, 'update']).as('tuteurs.update')
+    router
+      .put('eleves/:id/tuteurs/:tuteurId/principal', [controllers.Tuteurs, 'principal'])
+      .as('tuteurs.principal')
+    router
+      .delete('eleves/:id/tuteurs/:tuteurId', [controllers.Tuteurs, 'detacher'])
+      .as('tuteurs.detacher')
+    router
+      .post('eleves/:id/tuteurs/:tuteurId/acces', [controllers.Tuteurs, 'acces'])
+      .as('tuteurs.acces')
+
+    router.get('inscription', [controllers.Inscriptions, 'create']).as('inscription')
+    router.post('inscriptions', [controllers.Inscriptions, 'store']).as('inscriptions.store')
+    router
+      .get('inscriptions/:id/fiche', [controllers.Inscriptions, 'fiche'])
+      .as('inscriptions.fiche')
+    router
+      .post('inscriptions/:id/soumettre', [controllers.Inscriptions, 'soumettre'])
+      .as('inscriptions.soumettre')
+    router
+      .post('inscriptions/:id/annuler', [controllers.Inscriptions, 'annuler'])
+      .as('inscriptions.annuler')
+    router
+      .post('inscriptions/:id/pieces/:type', [controllers.Inscriptions, 'deposerPiece'])
+      .as('inscriptions.piece')
+    router
+      .post('inscriptions/changer-classe', [controllers.Inscriptions, 'changerClasse'])
+      .as('inscriptions.changer_classe')
+    router.get('pieces/:id', [controllers.Inscriptions, 'lirePiece']).as('pieces.lire')
+    router.get('dossiers', [controllers.Inscriptions, 'dossiers']).as('dossiers')
+
+    router.get('import', [controllers.Imports, 'index']).as('import')
+    router.get('import/modele', [controllers.Imports, 'modele']).as('import.modele')
+    router.post('import', [controllers.Imports, 'analyser']).as('import.analyser')
+    router.post('import/:id/accepter', [controllers.Imports, 'accepter']).as('import.accepter')
+    router
+      .post('import/:id/abandonner', [controllers.Imports, 'abandonner'])
+      .as('import.abandonner')
+
+    router.post('documents', [controllers.DocumentsGeneres, 'store']).as('documents.demander')
   })
   .prefix('scolarite')
   .as('scolarite')
-  .use(espace(['secretariat']))
+  .use(espace(['secretariat', 'direction']))
+
+router
+  .group(() => {
+    router.get('/', [controllers.DocumentsGeneres, 'index']).as('index')
+    router.get(':id', [controllers.DocumentsGeneres, 'telecharger']).as('telecharger')
+  })
+  .prefix('documents')
+  .as('documents')
+  .use(espace(['secretariat', 'direction', 'admin']))
 
 router
   .group(() => {
@@ -145,6 +203,11 @@ router
     router.post('niveaux', [controllers.Structure, 'storeNiveau']).as('niveaux.store')
     router.post('matieres', [controllers.Structure, 'storeMatiere']).as('matieres.store')
     router.put('coefficients', [controllers.Structure, 'updateCoefficient']).as('coefficients')
+    router
+      .put('programme/obligatoire', [controllers.Structure, 'updateObligatoire'])
+      .as('programme.obligatoire')
+    router.get('etablissement', [controllers.Etablissement, 'edit']).as('etablissement')
+    router.put('etablissement', [controllers.Etablissement, 'update']).as('etablissement.update')
 
     router.get('classes', [controllers.Classes, 'index']).as('classes')
     router.post('annees/:anneeId/classes', [controllers.Classes, 'store']).as('classes.store')

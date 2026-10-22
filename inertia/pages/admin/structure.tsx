@@ -11,7 +11,12 @@ import { useState } from 'react'
 
 type Niveau = { id: number; code: string; libelle: string; ordre: number; cycle: string }
 type Matiere = { id: number; code: string; libelle: string; famille: string; noteMaxDefaut: number }
-type Coefficient = { niveauId: number; matiereId: number; coefficient: number }
+type Coefficient = {
+  niveauId: number
+  matiereId: number
+  coefficient: number
+  obligatoire: boolean
+}
 
 const FAMILLES: Record<string, string> = {
   litteraire: 'Littéraire',
@@ -279,6 +284,72 @@ export default function Structure({
               </div>
             ))}
           </div>
+        )}
+
+        {niveaux.length > 0 && coefficients.length > 0 && (
+          <section
+            aria-label="Matières obligatoires"
+            className="flex flex-col gap-3 rounded-carte border border-bordure bg-white p-4"
+          >
+            <div className="flex flex-col gap-1">
+              <span className="text-moyen font-bold">Matières obligatoires</span>
+              <span className="text-leg text-encre-3">
+                Décochez une matière facultative : sans note, elle ne bloquera pas la génération des
+                bulletins.
+              </span>
+            </div>
+            <div className="overflow-x-auto">
+              {matieres.map((m) => (
+                <div
+                  key={m.id}
+                  style={colonnes}
+                  className="grid items-center gap-1.5 border-t border-separateur py-1.5 first:border-t-0"
+                >
+                  <span className="truncate text-meta font-semibold">{m.libelle}</span>
+                  {niveaux.map((n) => {
+                    const ligne = coefficients.find(
+                      (c) => c.niveauId === n.id && c.matiereId === m.id
+                    )
+                    if (!ligne) {
+                      return (
+                        <span key={n.id} className="text-center text-leg text-encre-4">
+                          —
+                        </span>
+                      )
+                    }
+                    return (
+                      <button
+                        key={n.id}
+                        type="button"
+                        role="checkbox"
+                        aria-checked={ligne.obligatoire}
+                        aria-label={`${m.libelle} obligatoire en ${n.libelle}`}
+                        onClick={() =>
+                          router.put(
+                            '/admin/programme/obligatoire',
+                            { niveauId: n.id, matiereId: m.id, obligatoire: !ligne.obligatoire },
+                            { preserveScroll: true }
+                          )
+                        }
+                        className="flex h-9 items-center justify-center"
+                      >
+                        <span
+                          className={cx(
+                            'flex size-5 items-center justify-center rounded-[6px] border-[1.5px] text-[10px] text-white',
+                            ligne.obligatoire
+                              ? 'border-accent bg-accent'
+                              : 'border-bordure-forte bg-white'
+                          )}
+                        >
+                          {ligne.obligatoire && <Icone nom="check" />}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </section>
         )}
       </div>
     </Coque>

@@ -24,3 +24,6 @@ yarn-error.log
 
 # Platform specific
 .DS_Store
+
+# Fichiers déposés et générés (données personnelles) : jamais dans le dépôt
+storage

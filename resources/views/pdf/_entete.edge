@@ -1,0 +1,12 @@
+<div class="entete">
+  <div>
+    <div class="nom">{{ etablissement.nom }}</div>
+    <div class="coord">
+      @if(etablissement.adresse){{ etablissement.adresse }}<br>@end
+      @if(etablissement.ville){{ etablissement.ville }}@if(etablissement.pays) — {{ etablissement.pays }}@end<br>@end
+      @if(etablissement.telephone)Tél. {{ etablissement.telephone }}@end
+      @if(etablissement.email) · {{ etablissement.email }}@end
+    </div>
+  </div>
+  <div class="coord">Édité le {{ date }}</div>
+</div>

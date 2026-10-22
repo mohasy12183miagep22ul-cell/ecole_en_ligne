@@ -44,12 +44,53 @@ export interface ApiDefinition {
     validation: typeof routes['direction.validation']
     deliberation: typeof routes['direction.deliberation']
     bulletins: typeof routes['direction.bulletins']
+    inscriptions: typeof routes['direction.inscriptions'] & {
+      valider: typeof routes['direction.inscriptions.valider']
+      refuser: typeof routes['direction.inscriptions.refuser']
+    }
   }
   scolarite: {
-    eleves: typeof routes['scolarite.eleves']
+    eleves: typeof routes['scolarite.eleves'] & {
+      update: typeof routes['scolarite.eleves.update']
+      statut: typeof routes['scolarite.eleves.statut']
+      reactiver: typeof routes['scolarite.eleves.reactiver']
+      photo: typeof routes['scolarite.eleves.photo']
+    }
     fiche: typeof routes['scolarite.fiche']
+    tuteurs: {
+      store: typeof routes['scolarite.tuteurs.store']
+      rattacher: typeof routes['scolarite.tuteurs.rattacher']
+      update: typeof routes['scolarite.tuteurs.update']
+      principal: typeof routes['scolarite.tuteurs.principal']
+      detacher: typeof routes['scolarite.tuteurs.detacher']
+      acces: typeof routes['scolarite.tuteurs.acces']
+    }
     inscription: typeof routes['scolarite.inscription']
+    inscriptions: {
+      store: typeof routes['scolarite.inscriptions.store']
+      fiche: typeof routes['scolarite.inscriptions.fiche']
+      soumettre: typeof routes['scolarite.inscriptions.soumettre']
+      annuler: typeof routes['scolarite.inscriptions.annuler']
+      piece: typeof routes['scolarite.inscriptions.piece']
+      changerClasse: typeof routes['scolarite.inscriptions.changer_classe']
+    }
+    pieces: {
+      lire: typeof routes['scolarite.pieces.lire']
+    }
     dossiers: typeof routes['scolarite.dossiers']
+    import: typeof routes['scolarite.import'] & {
+      modele: typeof routes['scolarite.import.modele']
+      analyser: typeof routes['scolarite.import.analyser']
+      accepter: typeof routes['scolarite.import.accepter']
+      abandonner: typeof routes['scolarite.import.abandonner']
+    }
+    documents: {
+      demander: typeof routes['scolarite.documents.demander']
+    }
+  }
+  documents: {
+    index: typeof routes['documents.index']
+    telecharger: typeof routes['documents.telecharger']
   }
   admin: {
     accueil: typeof routes['admin.accueil']
@@ -70,6 +111,12 @@ export interface ApiDefinition {
       store: typeof routes['admin.matieres.store']
     }
     coefficients: typeof routes['admin.coefficients']
+    programme: {
+      obligatoire: typeof routes['admin.programme.obligatoire']
+    }
+    etablissement: typeof routes['admin.etablissement'] & {
+      update: typeof routes['admin.etablissement.update']
+    }
     classes: typeof routes['admin.classes'] & {
       store: typeof routes['admin.classes.store']
       update: typeof routes['admin.classes.update']

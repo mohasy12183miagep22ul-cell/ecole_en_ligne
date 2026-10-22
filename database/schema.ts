@@ -106,6 +106,267 @@ export class ClassSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class CompteursMatriculeSchema extends BaseModel {
+  static $columns = ['annee', 'dernier'] as const
+  $columns = CompteursMatriculeSchema.$columns
+  @column({ isPrimary: true })
+  declare annee: number
+  @column()
+  declare dernier: number
+}
+
+export class DocumentSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'deletedAt',
+    'fichier',
+    'fourni',
+    'id',
+    'inscriptionId',
+    'mime',
+    'nomOrigine',
+    'taille',
+    'type',
+    'updatedAt',
+  ] as const
+  $columns = DocumentSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare fichier: string | null
+  @column()
+  declare fourni: boolean
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare inscriptionId: number
+  @column()
+  declare mime: string | null
+  @column()
+  declare nomOrigine: string | null
+  @column()
+  declare taille: number | null
+  @column()
+  declare type: any
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class EleveTuteurSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'deletedAt',
+    'eleveId',
+    'id',
+    'principal',
+    'tuteurId',
+    'updatedAt',
+  ] as const
+  $columns = EleveTuteurSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare eleveId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare principal: boolean
+  @column()
+  declare tuteurId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class EleveSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'dateNaissance',
+    'deletedAt',
+    'id',
+    'lieuNaissance',
+    'matricule',
+    'nationalite',
+    'nom',
+    'numeroActe',
+    'photo',
+    'prenoms',
+    'sexe',
+    'statut',
+    'statutDate',
+    'statutMotif',
+    'updatedAt',
+  ] as const
+  $columns = EleveSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.date()
+  declare dateNaissance: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare lieuNaissance: string
+  @column()
+  declare matricule: string
+  @column()
+  declare nationalite: string | null
+  @column()
+  declare nom: string
+  @column()
+  declare numeroActe: string | null
+  @column()
+  declare photo: string | null
+  @column()
+  declare prenoms: string
+  @column()
+  declare sexe: any
+  @column()
+  declare statut: any | null
+  @column.date()
+  declare statutDate: DateTime | null
+  @column()
+  declare statutMotif: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class FichiersGenereSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'deletedAt',
+    'erreur',
+    'etat',
+    'fichier',
+    'format',
+    'id',
+    'libelle',
+    'parametres',
+    'type',
+    'updatedAt',
+    'userId',
+  ] as const
+  $columns = FichiersGenereSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare erreur: string | null
+  @column()
+  declare etat: any
+  @column()
+  declare fichier: string | null
+  @column()
+  declare format: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libelle: string
+  @column()
+  declare parametres: any
+  @column()
+  declare type: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class ImportSchema extends BaseModel {
+  static $columns = [
+    'anneeId',
+    'createdAt',
+    'deletedAt',
+    'erreurs',
+    'etat',
+    'id',
+    'lignes',
+    'nomFichier',
+    'updatedAt',
+    'userId',
+  ] as const
+  $columns = ImportSchema.$columns
+  @column()
+  declare anneeId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare erreurs: any
+  @column()
+  declare etat: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare lignes: any
+  @column()
+  declare nomFichier: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+}
+
+export class InscriptionSchema extends BaseModel {
+  static $columns = [
+    'anneeId',
+    'classeId',
+    'createdAt',
+    'dateInscription',
+    'deletedAt',
+    'eleveId',
+    'etablissementOrigine',
+    'etat',
+    'id',
+    'motif',
+    'motifDepassement',
+    'niveauId',
+    'redoublant',
+    'updatedAt',
+    'valideLe',
+    'validePar',
+  ] as const
+  $columns = InscriptionSchema.$columns
+  @column()
+  declare anneeId: number
+  @column()
+  declare classeId: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.date()
+  declare dateInscription: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare eleveId: number
+  @column()
+  declare etablissementOrigine: string | null
+  @column()
+  declare etat: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare motif: string | null
+  @column()
+  declare motifDepassement: string | null
+  @column()
+  declare niveauId: number
+  @column()
+  declare redoublant: boolean
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column.dateTime()
+  declare valideLe: DateTime | null
+  @column()
+  declare validePar: number | null
+}
+
 export class JetonsReinitialisationSchema extends BaseModel {
   static $columns = [
     'createdAt',
@@ -256,6 +517,48 @@ export class NiveauSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class ParametresEtablissementSchema extends BaseModel {
+  static $columns = [
+    'adresse',
+    'chefEtablissement',
+    'createdAt',
+    'deletedAt',
+    'email',
+    'id',
+    'nom',
+    'pays',
+    'telephone',
+    'titreChef',
+    'updatedAt',
+    'ville',
+  ] as const
+  $columns = ParametresEtablissementSchema.$columns
+  @column()
+  declare adresse: string | null
+  @column()
+  declare chefEtablissement: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare email: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare nom: string
+  @column()
+  declare pays: string | null
+  @column()
+  declare telephone: string | null
+  @column()
+  declare titreChef: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare ville: string | null
+}
+
 export class PeriodeSchema extends BaseModel {
   static $columns = [
     'anneeId',
@@ -289,6 +592,99 @@ export class PeriodeSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class QueueJobSchema extends BaseModel {
+  static $columns = [
+    'acquiredAt',
+    'data',
+    'dedupAt',
+    'dedupId',
+    'dedupTtl',
+    'error',
+    'executeAt',
+    'finishedAt',
+    'id',
+    'queue',
+    'score',
+    'status',
+    'workerId',
+  ] as const
+  $columns = QueueJobSchema.$columns
+  @column()
+  declare acquiredAt: bigint | number | null
+  @column()
+  declare data: string
+  @column()
+  declare dedupAt: bigint | number | null
+  @column()
+  declare dedupId: string | null
+  @column()
+  declare dedupTtl: bigint | number | null
+  @column()
+  declare error: string | null
+  @column()
+  declare executeAt: bigint | number | null
+  @column()
+  declare finishedAt: bigint | number | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare queue: string
+  @column()
+  declare score: bigint | number | null
+  @column()
+  declare status: string
+  @column()
+  declare workerId: string | null
+}
+
+export class QueueScheduleSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'cronExpression',
+    'everyMs',
+    'fromDate',
+    'id',
+    'lastRunAt',
+    'name',
+    'nextRunAt',
+    'payload',
+    'runCount',
+    'runLimit',
+    'status',
+    'timezone',
+    'toDate',
+  ] as const
+  $columns = QueueScheduleSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare cronExpression: string | null
+  @column()
+  declare everyMs: bigint | number | null
+  @column()
+  declare fromDate: bigint | number | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare lastRunAt: bigint | number | null
+  @column()
+  declare name: string
+  @column()
+  declare nextRunAt: bigint | number | null
+  @column()
+  declare payload: string
+  @column()
+  declare runCount: number
+  @column()
+  declare runLimit: number | null
+  @column()
+  declare status: string
+  @column()
+  declare timezone: string
+  @column()
+  declare toDate: bigint | number | null
+}
+
 export class RolesUtilisateurSchema extends BaseModel {
   static $columns = ['createdAt', 'deletedAt', 'id', 'role', 'updatedAt', 'userId'] as const
   $columns = RolesUtilisateurSchema.$columns
@@ -304,6 +700,45 @@ export class RolesUtilisateurSchema extends BaseModel {
   declare updatedAt: DateTime | null
   @column()
   declare userId: number
+}
+
+export class TuteurSchema extends BaseModel {
+  static $columns = [
+    'adresse',
+    'createdAt',
+    'deletedAt',
+    'email',
+    'id',
+    'lienParente',
+    'nom',
+    'profession',
+    'telephone',
+    'updatedAt',
+    'userId',
+  ] as const
+  $columns = TuteurSchema.$columns
+  @column()
+  declare adresse: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare email: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare lienParente: any
+  @column()
+  declare nom: string
+  @column()
+  declare profession: string | null
+  @column()
+  declare telephone: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number | null
 }
 
 export class UserSchema extends BaseModel {

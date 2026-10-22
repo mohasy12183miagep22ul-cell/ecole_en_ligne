@@ -371,6 +371,45 @@ export interface Registry {
       rawResponse: ExtractRawResponse<unknown>
     }
   }
+  'direction.inscriptions': {
+    methods: ["GET","HEAD"]
+    pattern: '/direction/inscriptions'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['index']>>>
+    }
+  }
+  'direction.inscriptions.valider': {
+    methods: ["POST"]
+    pattern: '/direction/inscriptions/:id/valider'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').validerInscriptionValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').validerInscriptionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['valider']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['valider']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['valider']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'direction.inscriptions.refuser': {
+    methods: ["POST"]
+    pattern: '/direction/inscriptions/:id/refuser'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['refuser']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['refuser']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_inscriptions_controller').default['refuser']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'scolarite.eleves': {
     methods: ["GET","HEAD"]
     pattern: '/scolarite/eleves'
@@ -378,10 +417,10 @@ export interface Registry {
       body: {}
       paramsTuple: []
       params: {}
-      query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      query: ExtractQueryForGet<InferInput<(typeof import('#validators/scolarite').listeElevesValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['index']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'scolarite.fiche': {
@@ -392,9 +431,139 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['show']>>>
+    }
+  }
+  'scolarite.eleves.update': {
+    methods: ["PUT"]
+    pattern: '/scolarite/eleves/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').identiteValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').identiteValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.eleves.statut': {
+    methods: ["POST"]
+    pattern: '/scolarite/eleves/:id/statut'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').statutValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').statutValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['statut']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['statut']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['statut']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.eleves.reactiver': {
+    methods: ["POST"]
+    pattern: '/scolarite/eleves/:id/reactiver'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['reactiver']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['reactiver']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['reactiver']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.eleves.photo': {
+    methods: ["GET","HEAD"]
+    pattern: '/scolarite/eleves/:id/photo'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['photo']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['photo']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/eleves_controller').default['photo']>>>
+    }
+  }
+  'scolarite.tuteurs.store': {
+    methods: ["POST"]
+    pattern: '/scolarite/eleves/:id/tuteurs'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').tuteurValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').tuteurValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.tuteurs.rattacher': {
+    methods: ["POST"]
+    pattern: '/scolarite/eleves/:id/tuteurs/:tuteurId/rattacher'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; tuteurId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['rattacher']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['rattacher']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['rattacher']>>>
+    }
+  }
+  'scolarite.tuteurs.update': {
+    methods: ["PUT"]
+    pattern: '/scolarite/eleves/:id/tuteurs/:tuteurId'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').tuteurValidator)>>
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; tuteurId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').tuteurValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.tuteurs.principal': {
+    methods: ["PUT"]
+    pattern: '/scolarite/eleves/:id/tuteurs/:tuteurId/principal'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; tuteurId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['principal']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['principal']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['principal']>>>
+    }
+  }
+  'scolarite.tuteurs.detacher': {
+    methods: ["DELETE"]
+    pattern: '/scolarite/eleves/:id/tuteurs/:tuteurId'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; tuteurId: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['detacher']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['detacher']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['detacher']>>>
+    }
+  }
+  'scolarite.tuteurs.acces': {
+    methods: ["POST"]
+    pattern: '/scolarite/eleves/:id/tuteurs/:tuteurId/acces'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').accesPortailValidator)>>
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; tuteurId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').accesPortailValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['acces']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['acces']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/tuteurs_controller').default['acces']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'scolarite.inscription': {
@@ -405,9 +574,100 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['create']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['create']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['create']>>>
+    }
+  }
+  'scolarite.inscriptions.store': {
+    methods: ["POST"]
+    pattern: '/scolarite/inscriptions'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').dossierValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').dossierValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.inscriptions.fiche': {
+    methods: ["GET","HEAD"]
+    pattern: '/scolarite/inscriptions/:id/fiche'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['fiche']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['fiche']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['fiche']>>>
+    }
+  }
+  'scolarite.inscriptions.soumettre': {
+    methods: ["POST"]
+    pattern: '/scolarite/inscriptions/:id/soumettre'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['soumettre']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['soumettre']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['soumettre']>>>
+    }
+  }
+  'scolarite.inscriptions.annuler': {
+    methods: ["POST"]
+    pattern: '/scolarite/inscriptions/:id/annuler'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['annuler']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['annuler']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['annuler']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.inscriptions.piece': {
+    methods: ["POST"]
+    pattern: '/scolarite/inscriptions/:id/pieces/:type'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').pieceValidator)>>
+      paramsTuple: [ParamValue, ParamValue]
+      params: { id: ParamValue; type: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').pieceValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['deposerPiece']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['deposerPiece']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['deposerPiece']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.inscriptions.changer_classe': {
+    methods: ["POST"]
+    pattern: '/scolarite/inscriptions/changer-classe'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').changerClasseValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').changerClasseValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['changerClasse']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['changerClasse']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['changerClasse']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.pieces.lire': {
+    methods: ["GET","HEAD"]
+    pattern: '/scolarite/pieces/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['lirePiece']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['lirePiece']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['lirePiece']>>>
     }
   }
   'scolarite.dossiers': {
@@ -418,9 +678,113 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['dossiers']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['dossiers']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/inscriptions_controller').default['dossiers']>>>
+    }
+  }
+  'scolarite.import': {
+    methods: ["GET","HEAD"]
+    pattern: '/scolarite/import'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['index']>>>
+    }
+  }
+  'scolarite.import.modele': {
+    methods: ["GET","HEAD"]
+    pattern: '/scolarite/import/modele'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['modele']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['modele']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['modele']>>>
+    }
+  }
+  'scolarite.import.analyser': {
+    methods: ["POST"]
+    pattern: '/scolarite/import'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').importValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').importValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['analyser']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['analyser']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['analyser']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'scolarite.import.accepter': {
+    methods: ["POST"]
+    pattern: '/scolarite/import/:id/accepter'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['accepter']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['accepter']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['accepter']>>>
+    }
+  }
+  'scolarite.import.abandonner': {
+    methods: ["POST"]
+    pattern: '/scolarite/import/:id/abandonner'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['abandonner']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['abandonner']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/imports_controller').default['abandonner']>>>
+    }
+  }
+  'scolarite.documents.demander': {
+    methods: ["POST"]
+    pattern: '/scolarite/documents'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').demandeDocumentValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').demandeDocumentValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'documents.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/documents'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['index']>>>
+    }
+  }
+  'documents.telecharger': {
+    methods: ["GET","HEAD"]
+    pattern: '/documents/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['telecharger']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['telecharger']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['telecharger']>>>
     }
   }
   'admin.accueil': {
@@ -564,6 +928,45 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateCoefficient']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateCoefficient']>>> | { status: 422; response: { errors: SimpleError[] } }
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateCoefficient']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.programme.obligatoire': {
+    methods: ["PUT"]
+    pattern: '/admin/programme/obligatoire'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').obligatoireValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').obligatoireValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateObligatoire']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateObligatoire']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateObligatoire']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.etablissement': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/etablissement'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/etablissement_controller').default['edit']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/etablissement_controller').default['edit']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/etablissement_controller').default['edit']>>>
+    }
+  }
+  'admin.etablissement.update': {
+    methods: ["PUT"]
+    pattern: '/admin/etablissement'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').etablissementValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').etablissementValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/etablissement_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/etablissement_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/etablissement_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'admin.classes': {

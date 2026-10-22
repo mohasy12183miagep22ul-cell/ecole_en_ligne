@@ -11,7 +11,11 @@ const ESPACES: Array<{ url: string; autorises: Role[] }> = [
   { url: '/portail', autorises: ['tuteur', 'eleve'] },
   { url: '/enseignant/classes', autorises: ['enseignant', 'professeur_principal'] },
   { url: '/direction', autorises: ['direction'] },
-  { url: '/scolarite/eleves', autorises: ['secretariat'] },
+  { url: '/scolarite/eleves', autorises: ['secretariat', 'direction'] },
+  { url: '/scolarite/inscription', autorises: ['secretariat', 'direction'] },
+  { url: '/scolarite/import', autorises: ['secretariat', 'direction'] },
+  { url: '/direction/inscriptions', autorises: ['direction'] },
+  { url: '/documents', autorises: ['secretariat', 'direction', 'admin'] },
   { url: '/admin', autorises: ['admin'] },
   { url: '/admin/journal', autorises: ['admin', 'direction'] },
 ]

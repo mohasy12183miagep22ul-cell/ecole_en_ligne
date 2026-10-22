@@ -68,6 +68,47 @@ export default class StructureService {
   }
 
   /**
+   * Matière obligatoire ou facultative au programme d'un niveau (une matière
+   * facultative sans note ne bloque pas la génération des bulletins, RG17).
+   */
+  static async definirObligatoire(
+    niveauId: number,
+    matiereId: number,
+    obligatoire: boolean,
+    auteur: Auteur
+  ) {
+    const ligne = await NiveauMatiere.query()
+      .where('niveau_id', niveauId)
+      .where('matiere_id', matiereId)
+      .whereNull('deleted_at')
+      .first()
+    if (!ligne) {
+      throw new RegleGestionException(
+        'Cette matière n’est pas au programme du niveau : fixez d’abord son coefficient.',
+        'RG3'
+      )
+    }
+    if (ligne.obligatoire === obligatoire) return
+    await db.transaction(async (trx) => {
+      ligne.useTransaction(trx)
+      ligne.obligatoire = obligatoire
+      await ligne.save()
+      await JournalService.enregistrer(
+        {
+          userId: auteur.id,
+          action: obligatoire ? 'Matière rendue obligatoire' : 'Matière rendue facultative',
+          entite: 'niveau_matiere',
+          entiteId: ligne.id,
+          avant: { obligatoire: !obligatoire },
+          apres: { obligatoire },
+          ip: auteur.ip,
+        },
+        trx
+      )
+    })
+  }
+
+  /**
    * Fixe le coefficient d'une matière pour un niveau (RG3). `null` retire la
    * matière du programme du niveau (suppression logique de la ligne).
    */

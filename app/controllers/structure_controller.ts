@@ -1,6 +1,11 @@
 import { gererStructure } from '#abilities/main'
 import StructureService from '#services/structure_service'
-import { coefficientValidator, matiereValidator, niveauValidator } from '#validators/structure'
+import {
+  coefficientValidator,
+  matiereValidator,
+  niveauValidator,
+  obligatoireValidator,
+} from '#validators/structure'
 import type { HttpContext } from '@adonisjs/core/http'
 
 const auteur = ({ auth, request }: HttpContext) => ({
@@ -35,6 +40,7 @@ export default class StructureController {
         niveauId: p.niveauId,
         matiereId: p.matiereId,
         coefficient: p.coefficient,
+        obligatoire: p.obligatoire,
       })),
     })
   }
@@ -60,6 +66,14 @@ export default class StructureController {
     const { niveauId, matiereId, coefficient } =
       await ctx.request.validateUsing(coefficientValidator)
     await StructureService.definirCoefficient(niveauId, matiereId, coefficient, auteur(ctx))
+    return ctx.response.redirect().back()
+  }
+
+  async updateObligatoire(ctx: HttpContext) {
+    await ctx.bouncer.authorize(gererStructure)
+    const { niveauId, matiereId, obligatoire } =
+      await ctx.request.validateUsing(obligatoireValidator)
+    await StructureService.definirObligatoire(niveauId, matiereId, obligatoire, auteur(ctx))
     return ctx.response.redirect().back()
   }
 }
