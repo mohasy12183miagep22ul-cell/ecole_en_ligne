@@ -132,8 +132,31 @@ router
 
 router
   .group(() => {
-    router.on('/').renderInertia('admin/accueil', {}).as('accueil')
-    router.on('structure').renderInertia('admin/structure', {}).as('structure')
+    router.get('/', [controllers.AdminAccueil, 'index']).as('accueil')
+
+    router.get('annees', [controllers.Annees, 'index']).as('annees')
+    router.post('annees', [controllers.Annees, 'store']).as('annees.store')
+    router.post('annees/:id/activer', [controllers.Annees, 'activer']).as('annees.activer')
+    router.post('annees/:id/cloturer', [controllers.Annees, 'cloturer']).as('annees.cloturer')
+    router.post('annees/:id/dupliquer', [controllers.Annees, 'dupliquer']).as('annees.dupliquer')
+    router.put('periodes/:id', [controllers.Annees, 'updatePeriode']).as('periodes.update')
+
+    router.get('structure', [controllers.Structure, 'index']).as('structure')
+    router.post('niveaux', [controllers.Structure, 'storeNiveau']).as('niveaux.store')
+    router.post('matieres', [controllers.Structure, 'storeMatiere']).as('matieres.store')
+    router.put('coefficients', [controllers.Structure, 'updateCoefficient']).as('coefficients')
+
+    router.get('classes', [controllers.Classes, 'index']).as('classes')
+    router.post('annees/:anneeId/classes', [controllers.Classes, 'store']).as('classes.store')
+    router.put('classes/:id', [controllers.Classes, 'update']).as('classes.update')
+
+    router.get('affectations', [controllers.Affectations, 'index']).as('affectations')
+    router
+      .post('annees/:anneeId/affectations', [controllers.Affectations, 'store'])
+      .as('affectations.store')
+    router
+      .delete('affectations/:id', [controllers.Affectations, 'destroy'])
+      .as('affectations.destroy')
     router.get('comptes', [controllers.Comptes, 'index']).as('comptes')
     router.post('comptes', [controllers.Comptes, 'store']).as('comptes.store')
     router.put('comptes/:id/roles', [controllers.Comptes, 'updateRoles']).as('comptes.roles')

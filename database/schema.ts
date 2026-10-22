@@ -7,6 +7,105 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AffectationSchema extends BaseModel {
+  static $columns = [
+    'anneeId',
+    'classeId',
+    'createdAt',
+    'deletedAt',
+    'enseignantId',
+    'id',
+    'matiereId',
+    'updatedAt',
+  ] as const
+  $columns = AffectationSchema.$columns
+  @column()
+  declare anneeId: number
+  @column()
+  declare classeId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare enseignantId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare matiereId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class AnneesScolaireSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'dateDebut',
+    'dateFin',
+    'decoupage',
+    'deletedAt',
+    'etat',
+    'id',
+    'libelle',
+    'updatedAt',
+  ] as const
+  $columns = AnneesScolaireSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.date()
+  declare dateDebut: DateTime
+  @column.date()
+  declare dateFin: DateTime
+  @column()
+  declare decoupage: any
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare etat: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libelle: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class ClassSchema extends BaseModel {
+  static $columns = [
+    'anneeId',
+    'capacite',
+    'createdAt',
+    'deletedAt',
+    'id',
+    'libelle',
+    'niveauId',
+    'professeurPrincipalId',
+    'salle',
+    'updatedAt',
+  ] as const
+  $columns = ClassSchema.$columns
+  @column()
+  declare anneeId: number
+  @column()
+  declare capacite: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libelle: string
+  @column()
+  declare niveauId: number
+  @column()
+  declare professeurPrincipalId: number | null
+  @column()
+  declare salle: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class JetonsReinitialisationSchema extends BaseModel {
   static $columns = [
     'createdAt',
@@ -65,6 +164,129 @@ export class JournalSchema extends BaseModel {
   declare ip: string | null
   @column()
   declare userId: number | null
+}
+
+export class MatiereSchema extends BaseModel {
+  static $columns = [
+    'code',
+    'createdAt',
+    'deletedAt',
+    'famille',
+    'id',
+    'libelle',
+    'noteMaxDefaut',
+    'updatedAt',
+  ] as const
+  $columns = MatiereSchema.$columns
+  @column()
+  declare code: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare famille: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libelle: string
+  @column()
+  declare noteMaxDefaut: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class NiveauMatiereSchema extends BaseModel {
+  static $columns = [
+    'coefficient',
+    'createdAt',
+    'deletedAt',
+    'id',
+    'matiereId',
+    'niveauId',
+    'obligatoire',
+    'updatedAt',
+  ] as const
+  $columns = NiveauMatiereSchema.$columns
+  @column()
+  declare coefficient: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare matiereId: number
+  @column()
+  declare niveauId: number
+  @column()
+  declare obligatoire: boolean
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class NiveauSchema extends BaseModel {
+  static $columns = [
+    'code',
+    'createdAt',
+    'cycle',
+    'deletedAt',
+    'id',
+    'libelle',
+    'ordre',
+    'updatedAt',
+  ] as const
+  $columns = NiveauSchema.$columns
+  @column()
+  declare code: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare cycle: any
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libelle: string
+  @column()
+  declare ordre: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PeriodeSchema extends BaseModel {
+  static $columns = [
+    'anneeId',
+    'createdAt',
+    'debutSaisie',
+    'deletedAt',
+    'finSaisie',
+    'id',
+    'libelle',
+    'ordre',
+    'updatedAt',
+  ] as const
+  $columns = PeriodeSchema.$columns
+  @column()
+  declare anneeId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.date()
+  declare debutSaisie: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column.date()
+  declare finSaisie: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare libelle: string
+  @column()
+  declare ordre: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
 
 export class RolesUtilisateurSchema extends BaseModel {

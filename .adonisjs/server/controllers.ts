@@ -4,9 +4,14 @@
  */
 
 export const controllers = {
+  AdminAccueil: () => import('#controllers/admin_accueil_controller'),
+  Affectations: () => import('#controllers/affectations_controller'),
+  Annees: () => import('#controllers/annees_controller'),
+  Classes: () => import('#controllers/classes_controller'),
   Comptes: () => import('#controllers/comptes_controller'),
   Journal: () => import('#controllers/journal_controller'),
   MotDePasseOublie: () => import('#controllers/mot_de_passe_oublie_controller'),
   Profil: () => import('#controllers/profil_controller'),
   Session: () => import('#controllers/session_controller'),
+  Structure: () => import('#controllers/structure_controller'),
 }

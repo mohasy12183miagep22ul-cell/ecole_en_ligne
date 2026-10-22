@@ -53,7 +53,31 @@ export interface ApiDefinition {
   }
   admin: {
     accueil: typeof routes['admin.accueil']
+    annees: typeof routes['admin.annees'] & {
+      store: typeof routes['admin.annees.store']
+      activer: typeof routes['admin.annees.activer']
+      cloturer: typeof routes['admin.annees.cloturer']
+      dupliquer: typeof routes['admin.annees.dupliquer']
+    }
+    periodes: {
+      update: typeof routes['admin.periodes.update']
+    }
     structure: typeof routes['admin.structure']
+    niveaux: {
+      store: typeof routes['admin.niveaux.store']
+    }
+    matieres: {
+      store: typeof routes['admin.matieres.store']
+    }
+    coefficients: typeof routes['admin.coefficients']
+    classes: typeof routes['admin.classes'] & {
+      store: typeof routes['admin.classes.store']
+      update: typeof routes['admin.classes.update']
+    }
+    affectations: typeof routes['admin.affectations'] & {
+      store: typeof routes['admin.affectations.store']
+      destroy: typeof routes['admin.affectations.destroy']
+    }
     comptes: typeof routes['admin.comptes'] & {
       store: typeof routes['admin.comptes.store']
       roles: typeof routes['admin.comptes.roles']

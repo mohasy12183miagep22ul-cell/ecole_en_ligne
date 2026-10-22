@@ -49,6 +49,23 @@ export const COMPTES_DEMO: Array<{
     doubleFacteur: true,
     roles: ['admin'],
   },
+  // Collègues d'Ibrahima Sow (prototype), pour les affectations de la 3e A.
+  ...(
+    [
+      ['Aïssatou Keïta', 'a.keita', 'Français'],
+      ['Lansana Kaba', 'l.kaba', 'Anglais'],
+      ['Sékou Condé', 's.conde', 'Histoire-Géographie'],
+      ['Hawa Touré', 'h.toure', 'SVT'],
+      ['Mamadou Fofana', 'm.fofana', 'Physique-Chimie'],
+      ['Oumar Barry', 'o.barry', 'EPS'],
+    ] as const
+  ).map(([fullName, identifiant, matiere]) => ({
+    fullName,
+    email: `${identifiant}@flamboyants.edu.gn`,
+    sousTitre: matiere,
+    doubleFacteur: false,
+    roles: ['enseignant'] as Role[],
+  })),
 ]
 export const MOT_DE_PASSE_DEMO = 'Flamboyant2026'
 

@@ -29,3 +29,12 @@ export const deverrouillerEvaluation = Bouncer.ability(async (user: User) => {
   await user.load('rolesUtilisateur')
   return user.aLeRole('direction')
 })
+
+/**
+ * Paramétrer la structure pédagogique (années, périodes, niveaux, matières,
+ * coefficients, classes, affectations) : administrateur uniquement.
+ */
+export const gererStructure = Bouncer.ability(async (user: User) => {
+  await user.load('rolesUtilisateur')
+  return user.aLeRole('admin')
+})

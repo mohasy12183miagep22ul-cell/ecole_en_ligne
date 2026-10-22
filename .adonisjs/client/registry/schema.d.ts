@@ -431,9 +431,87 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/admin_accueil_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/admin_accueil_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/admin_accueil_controller').default['index']>>>
+    }
+  }
+  'admin.annees': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/annees'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['index']>>>
+    }
+  }
+  'admin.annees.store': {
+    methods: ["POST"]
+    pattern: '/admin/annees'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').creerAnneeValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').creerAnneeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.annees.activer': {
+    methods: ["POST"]
+    pattern: '/admin/annees/:id/activer'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['activer']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['activer']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['activer']>>>
+    }
+  }
+  'admin.annees.cloturer': {
+    methods: ["POST"]
+    pattern: '/admin/annees/:id/cloturer'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['cloturer']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['cloturer']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['cloturer']>>>
+    }
+  }
+  'admin.annees.dupliquer': {
+    methods: ["POST"]
+    pattern: '/admin/annees/:id/dupliquer'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').dupliquerAnneeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').dupliquerAnneeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['dupliquer']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['dupliquer']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['dupliquer']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.periodes.update': {
+    methods: ["PUT"]
+    pattern: '/admin/periodes/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').periodeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').periodeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['updatePeriode']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['updatePeriode']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/annees_controller').default['updatePeriode']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'admin.structure': {
@@ -444,9 +522,126 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['index']>>>
+    }
+  }
+  'admin.niveaux.store': {
+    methods: ["POST"]
+    pattern: '/admin/niveaux'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').niveauValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').niveauValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['storeNiveau']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['storeNiveau']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['storeNiveau']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.matieres.store': {
+    methods: ["POST"]
+    pattern: '/admin/matieres'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').matiereValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').matiereValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['storeMatiere']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['storeMatiere']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['storeMatiere']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.coefficients': {
+    methods: ["PUT"]
+    pattern: '/admin/coefficients'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').coefficientValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').coefficientValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateCoefficient']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateCoefficient']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/structure_controller').default['updateCoefficient']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.classes': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/classes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['index']>>>
+    }
+  }
+  'admin.classes.store': {
+    methods: ["POST"]
+    pattern: '/admin/annees/:anneeId/classes'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').classeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { anneeId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').classeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.classes.update': {
+    methods: ["PUT"]
+    pattern: '/admin/classes/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').classeValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').classeValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/classes_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.affectations': {
+    methods: ["GET","HEAD"]
+    pattern: '/admin/affectations'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['index']>>>
+    }
+  }
+  'admin.affectations.store': {
+    methods: ["POST"]
+    pattern: '/admin/annees/:anneeId/affectations'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/structure').affectationValidator)>>
+      paramsTuple: [ParamValue]
+      params: { anneeId: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/structure').affectationValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'admin.affectations.destroy': {
+    methods: ["DELETE"]
+    pattern: '/admin/affectations/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['destroy']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['destroy']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/affectations_controller').default['destroy']>>>
     }
   }
   'admin.comptes': {

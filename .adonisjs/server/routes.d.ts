@@ -37,7 +37,22 @@ export type ScannedRoutes = {
     'scolarite.inscription': { paramsTuple?: []; params?: {} }
     'scolarite.dossiers': { paramsTuple?: []; params?: {} }
     'admin.accueil': { paramsTuple?: []; params?: {} }
+    'admin.annees': { paramsTuple?: []; params?: {} }
+    'admin.annees.store': { paramsTuple?: []; params?: {} }
+    'admin.annees.activer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.annees.cloturer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.annees.dupliquer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.periodes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.structure': { paramsTuple?: []; params?: {} }
+    'admin.niveaux.store': { paramsTuple?: []; params?: {} }
+    'admin.matieres.store': { paramsTuple?: []; params?: {} }
+    'admin.coefficients': { paramsTuple?: []; params?: {} }
+    'admin.classes': { paramsTuple?: []; params?: {} }
+    'admin.classes.store': { paramsTuple: [ParamValue]; params: {'anneeId': ParamValue} }
+    'admin.classes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.affectations': { paramsTuple?: []; params?: {} }
+    'admin.affectations.store': { paramsTuple: [ParamValue]; params: {'anneeId': ParamValue} }
+    'admin.affectations.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.comptes.store': { paramsTuple?: []; params?: {} }
     'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -71,7 +86,10 @@ export type ScannedRoutes = {
     'scolarite.inscription': { paramsTuple?: []; params?: {} }
     'scolarite.dossiers': { paramsTuple?: []; params?: {} }
     'admin.accueil': { paramsTuple?: []; params?: {} }
+    'admin.annees': { paramsTuple?: []; params?: {} }
     'admin.structure': { paramsTuple?: []; params?: {} }
+    'admin.classes': { paramsTuple?: []; params?: {} }
+    'admin.affectations': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.journal': { paramsTuple?: []; params?: {} }
   }
@@ -102,7 +120,10 @@ export type ScannedRoutes = {
     'scolarite.inscription': { paramsTuple?: []; params?: {} }
     'scolarite.dossiers': { paramsTuple?: []; params?: {} }
     'admin.accueil': { paramsTuple?: []; params?: {} }
+    'admin.annees': { paramsTuple?: []; params?: {} }
     'admin.structure': { paramsTuple?: []; params?: {} }
+    'admin.classes': { paramsTuple?: []; params?: {} }
+    'admin.affectations': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.journal': { paramsTuple?: []; params?: {} }
   }
@@ -114,11 +135,25 @@ export type ScannedRoutes = {
     'reinitialisation.update': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profil.mot_de_passe': { paramsTuple?: []; params?: {} }
+    'admin.annees.store': { paramsTuple?: []; params?: {} }
+    'admin.annees.activer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.annees.cloturer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.annees.dupliquer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.niveaux.store': { paramsTuple?: []; params?: {} }
+    'admin.matieres.store': { paramsTuple?: []; params?: {} }
+    'admin.classes.store': { paramsTuple: [ParamValue]; params: {'anneeId': ParamValue} }
+    'admin.affectations.store': { paramsTuple: [ParamValue]; params: {'anneeId': ParamValue} }
     'admin.comptes.store': { paramsTuple?: []; params?: {} }
   }
   PUT: {
+    'admin.periodes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'admin.coefficients': { paramsTuple?: []; params?: {} }
+    'admin.classes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes.activation': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  DELETE: {
+    'admin.affectations.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

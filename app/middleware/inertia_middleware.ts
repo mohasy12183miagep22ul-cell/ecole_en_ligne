@@ -24,6 +24,10 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
     return {
       errors: ctx.inertia.always(this.getValidationErrors(ctx)),
       user: ctx.inertia.always(auth?.user ? UserTransformer.transform(auth.user) : undefined),
+      // Année active, présente dans chaque page (null entre deux années).
+      anneeActive: ctx.inertia.always(
+        ctx.anneeActive ? { id: ctx.anneeActive.id, libelle: ctx.anneeActive.libelle } : null
+      ),
     }
   }
 

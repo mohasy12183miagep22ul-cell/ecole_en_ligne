@@ -64,7 +64,10 @@ export const espaces: Record<Espace, ConfigEspace> = {
     accent: 'admin',
     nav: [
       { libelle: 'Tableau de bord', icone: 'gauge', href: '/admin', exact: true },
+      { libelle: 'Années', icone: 'calendar-days', href: '/admin/annees' },
       { libelle: 'Structure', icone: 'sitemap', href: '/admin/structure' },
+      { libelle: 'Classes', icone: 'door-open', href: '/admin/classes' },
+      { libelle: 'Affectations', icone: 'chalkboard-user', href: '/admin/affectations' },
       { libelle: 'Comptes', icone: 'user-shield', href: '/admin/comptes' },
       { libelle: 'Journal', icone: 'clock-rotate-left', href: '/admin/journal' },
     ],

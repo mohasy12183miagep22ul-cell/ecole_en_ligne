@@ -1,38 +1,57 @@
 import Coque from '~/layouts/coque'
 import Icone from '~/components/ui/icone'
-import Pastille, { type Etat } from '~/components/ui/pastille'
-import { notifier } from '~/components/ui/toast'
-import { useFeuille } from '~/components/ui/feuille'
+import Pastille from '~/components/ui/pastille'
+import EtatVide from '~/components/ui/etat_vide'
 import { type NomIcone } from '~/lib/icones'
-import { journaliser } from '~/demo/store'
+import {
+  dateFr,
+  ETATS_ANNEE,
+  ETATS_SAISIE,
+  jourMois,
+  type EtatAnnee,
+  type EtatSaisie,
+} from '~/lib/structure'
+import { Link } from '@adonisjs/inertia/react'
 import { usePage } from '@inertiajs/react'
 
-const STATS: Array<[string, string, NomIcone]> = [
-  ['Niveaux', '7', 'layer-group'],
-  ['Classes', '18', 'door-open'],
-  ['Matières', '12', 'book'],
-  ['Comptes actifs', '214', 'users'],
-]
-const ANNEES: Array<[string, string, Etat, string]> = [
-  ['2026-2027', 'Active', 'succes', 'Trimestres · 18 classes'],
-  ['2027-2028', 'En préparation', 'info', 'Non créée'],
-  ['2025-2026', 'Clôturée', 'verrou', 'Lecture seule'],
-]
-const PERIODES: Array<[string, string, string, Etat]> = [
-  ['1er trimestre', '01/09 → 15/12/2026', 'Saisie ouverte', 'succes'],
-  ['2e trimestre', '05/01 → 27/03/2027', 'À venir', 'brouillon'],
-  ['3e trimestre', '06/04 → 26/06/2027', 'À venir', 'brouillon'],
-]
+type Props = {
+  statistiques: { niveaux: number; classes: number; matieres: number; comptesActifs: number }
+  annees: Array<{
+    id: number
+    libelle: string
+    etat: EtatAnnee
+    decoupage: 'trimestres' | 'semestres'
+    classes: number
+  }>
+  periodes: Array<{
+    id: number
+    libelle: string
+    debutSaisie: string
+    finSaisie: string
+    etatSaisie: EtatSaisie
+  }>
+}
 
-export default function AccueilAdmin() {
+const sousTitre = (a: Props['annees'][number]) =>
+  a.etat === 'cloturee'
+    ? 'Lecture seule'
+    : `${a.decoupage === 'trimestres' ? 'Trimestres' : 'Semestres'} · ${a.classes} classe${a.classes > 1 ? 's' : ''}`
+
+export default function AccueilAdmin({ statistiques, annees, periodes }: Props) {
   const { props } = usePage()
-  const [feuille, ouvrir] = useFeuille()
+  const active = props.anneeActive
+  const tuiles: Array<[string, number, NomIcone]> = [
+    ['Niveaux', statistiques.niveaux, 'layer-group'],
+    ['Classes', statistiques.classes, 'door-open'],
+    ['Matières', statistiques.matieres, 'book'],
+    ['Comptes actifs', statistiques.comptesActifs, 'users'],
+  ]
 
   return (
     <Coque espace="admin" titre="Tableau de bord">
       <div className="flex flex-col gap-4">
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,160px),1fr))] gap-3">
-          {STATS.map(([l, v, i]) => (
+          {tuiles.map(([l, v, i]) => (
             <div
               key={l}
               className="flex items-center gap-3 rounded-carte border border-bordure bg-white p-4"
@@ -47,72 +66,66 @@ export default function AccueilAdmin() {
             </div>
           ))}
         </div>
+
         <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] gap-4">
           <div className="flex flex-col gap-3 rounded-carte border border-bordure bg-white p-[18px]">
             <div className="flex items-center justify-between gap-2.5">
               <span className="text-moyen font-bold">Années scolaires</span>
-              <button
-                type="button"
-                onClick={() =>
-                  ouvrir({
-                    titre: 'Dupliquer 2026-2027 vers 2027-2028 ?',
-                    texte:
-                      'Niveaux, matières, coefficients, classes et affectations seront repris sur la nouvelle année, à corriger ensuite au cas par cas.',
-                    lignes: [
-                      ['Classes', '18'],
-                      ['Affectations', '146'],
-                    ],
-                    libelleConfirmer: 'Dupliquer',
-                    onConfirmer: () => {
-                      journaliser(
-                        props.user?.fullName ?? '',
-                        'Duplication d’année',
-                        '2026-2027 → 2027-2028',
-                        '',
-                        'En préparation'
-                      )
-                      notifier('Année 2027-2028 créée en préparation')
-                    },
-                  })
-                }
-                className="h-9 rounded-champ border border-accent bg-white px-3 text-meta font-bold text-accent"
+              <Link
+                route="admin.annees"
+                className="flex h-9 items-center rounded-champ border border-accent bg-white px-3 text-meta font-bold text-accent hover:no-underline"
               >
                 <Icone nom="reg-copy" className="mr-1.5" />
-                Dupliquer
-              </button>
+                Gérer et dupliquer
+              </Link>
             </div>
-            {ANNEES.map(([a, s, e, sous]) => (
-              <div key={a} className="flex items-center gap-3 border-t border-separateur py-2.5">
+            {annees.map((a) => (
+              <div key={a.id} className="flex items-center gap-3 border-t border-separateur py-2.5">
                 <div className="flex flex-1 flex-col gap-0.5">
-                  <span className="text-corps font-bold">{a}</span>
-                  <span className="text-leg text-encre-3">{sous}</span>
+                  <span className="text-corps font-bold">{a.libelle}</span>
+                  <span className="text-leg text-encre-3">{sousTitre(a)}</span>
                 </div>
-                <Pastille etat={e} taille="moyenne">
-                  {s}
+                <Pastille etat={ETATS_ANNEE[a.etat].etat} taille="moyenne">
+                  {ETATS_ANNEE[a.etat].libelle}
                 </Pastille>
               </div>
             ))}
+            {annees.length === 0 && (
+              <EtatVide icone="calendar-days" titre="Aucune année scolaire" cadre={false} />
+            )}
             <span className="text-leg text-encre-3">
               Une seule année active à la fois · une année clôturée est en lecture seule définitive.
             </span>
           </div>
+
           <div className="flex flex-col gap-3 rounded-carte border border-bordure bg-white p-[18px]">
-            <span className="text-moyen font-bold">Périodes 2026-2027 · fenêtres de saisie</span>
-            {PERIODES.map(([l, d, s, e]) => (
-              <div key={l} className="flex items-center gap-3 border-t border-separateur py-2.5">
+            <span className="text-moyen font-bold">
+              {active ? `Périodes ${active.libelle} · fenêtres de saisie` : 'Périodes'}
+            </span>
+            {periodes.map((p) => (
+              <div key={p.id} className="flex items-center gap-3 border-t border-separateur py-2.5">
                 <div className="flex flex-1 flex-col gap-0.5">
-                  <span className="text-corps font-bold">{l}</span>
-                  <span className="text-leg text-encre-3">{d}</span>
+                  <span className="text-corps font-bold">{p.libelle}</span>
+                  <span className="text-leg text-encre-3">
+                    {jourMois(p.debutSaisie)} → {dateFr(p.finSaisie)}
+                  </span>
                 </div>
-                <Pastille etat={e} taille="moyenne">
-                  {s}
+                <Pastille etat={ETATS_SAISIE[p.etatSaisie].etat} taille="moyenne">
+                  {ETATS_SAISIE[p.etatSaisie].libelle}
                 </Pastille>
               </div>
             ))}
+            {!active && (
+              <EtatVide
+                icone="calendar-days"
+                titre="Aucune année active"
+                texte="Activez une année en préparation pour ouvrir les saisies."
+                cadre={false}
+              />
+            )}
           </div>
         </div>
       </div>
-      {feuille}
     </Coque>
   )
 }
