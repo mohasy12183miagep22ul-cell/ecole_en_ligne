@@ -24,6 +24,15 @@ test.group('Authentification · connexion', (group) => {
     reponse.assertHeader('location', '/portail')
   })
 
+  test('après un échec, aucune saisie n’est renvoyée au formulaire', async ({ client, assert }) => {
+    const user = await creerCompte(['tuteur'])
+    const reponse = await connexion(client, user.email, 'MauvaisMotDePasse')
+    const flash = reponse.flashMessages() as Record<string, any>
+    assert.exists(flash.inputErrorsBag?.connexion)
+    assert.notProperty(flash, 'email')
+    assert.notProperty(flash, 'password')
+  })
+
   test('les rôles se cumulent : enseignant + professeur principal', async ({ client, assert }) => {
     const user = await creerCompte(['enseignant', 'professeur_principal'])
     const reponse = await connexion(client, user.email, MOT_DE_PASSE)

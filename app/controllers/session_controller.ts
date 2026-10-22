@@ -32,7 +32,7 @@ export default class SessionController {
         resultat.raison === 'verrouille'
           ? `Compte temporairement verrouillé après plusieurs échecs. Réessayez après ${resultat.jusqua.setZone('Africa/Conakry').toFormat('HH:mm')}.`
           : MESSAGE_IDENTIFIANTS
-      session.flashExcept(['password'])
+      // Aucune saisie n'est renvoyée au formulaire : il repart vide.
       session.flash('inputErrorsBag', { connexion: message })
       return response.redirect().back()
     }

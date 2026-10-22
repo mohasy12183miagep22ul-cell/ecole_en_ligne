@@ -54,8 +54,9 @@ const MOT_DE_PASSE_DEMO = 'Flamboyant2026'
 
 export default function Connexion() {
   const [profil, setProfil] = useState(PROFILS[0])
-  const [email, setEmail] = useState(PROFILS[0].email)
-  const [motDePasse, setMotDePasse] = useState(MOT_DE_PASSE_DEMO)
+  // Formulaire vide au chargement : rien n'est prérempli ni mémorisé.
+  const [email, setEmail] = useState('')
+  const [motDePasse, setMotDePasse] = useState('')
 
   return (
     <AuthLayout titre="Connexion" accent={profil.accent}>
@@ -97,14 +98,23 @@ export default function Connexion() {
         </div>
       </div>
 
-      <Form route="session.store" className="flex flex-col gap-[18px]">
+      <Form
+        route="session.store"
+        autoComplete="off"
+        onFinish={() => {
+          // Après chaque tentative, les champs sont effacés.
+          setEmail('')
+          setMotDePasse('')
+        }}
+        className="flex flex-col gap-[18px]"
+      >
         {({ errors, processing }) => (
           <>
             <Champ
               libelle="Adresse e-mail"
               name="email"
               type="email"
-              autoComplete="username"
+              autoComplete="off"
               inputMode="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -113,7 +123,7 @@ export default function Connexion() {
             <ChampMotDePasse
               libelle="Mot de passe"
               name="password"
-              autoComplete="current-password"
+              autoComplete="new-password"
               value={motDePasse}
               onChange={(e) => setMotDePasse(e.target.value)}
               erreur={errors.password}
