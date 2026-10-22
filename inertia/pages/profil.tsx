@@ -1,29 +1,20 @@
 import Coque from '~/layouts/coque'
 import Icone from '~/components/ui/icone'
+import { ChampMotDePasse } from '~/components/ui/champ'
 import { notifier } from '~/components/ui/toast'
 import { espaceDesRoles, espaces, LIBELLES_ROLES } from '~/lib/navigation'
 import { reinitialiser } from '~/demo/store'
 import { Form } from '@adonisjs/inertia/react'
 import { usePage } from '@inertiajs/react'
-import { useState, type ReactNode } from 'react'
+import { useState } from 'react'
 
 const LONGUEUR_MIN = 10
-const champ =
-  'h-12 rounded-bouton border bg-champ px-3.5 text-moyen outline-none focus:border-accent focus:bg-white'
-
-function Erreur({ id, children }: { id: string; children?: ReactNode }) {
-  return children ? (
-    <span id={id} role="alert" className="text-leg text-erreur">
-      {children}
-    </span>
-  ) : null
-}
-
 export default function Profil({ changementImpose }: { changementImpose: boolean }) {
   const { props } = usePage()
   const u = props.user
   const espace = espaceDesRoles(u?.roles)
   const [nouveau, setNouveau] = useState('')
+  const [confirmation, setConfirmation] = useState('')
 
   return (
     <Coque
@@ -76,78 +67,75 @@ export default function Profil({ changementImpose }: { changementImpose: boolean
         <Form
           route="profil.mot_de_passe"
           resetOnSuccess
-          onSuccess={() => setNouveau('')}
+          onSuccess={() => {
+            setNouveau('')
+            setConfirmation('')
+          }}
+          onError={() => notifier('Mot de passe non enregistré : corrigez le formulaire.', true)}
           className="flex flex-col gap-3.5 rounded-carte border border-bordure bg-white p-[18px]"
         >
-          {({ errors, processing }) => (
-            <>
-              <span className="text-moyen font-bold">Changer de mot de passe</span>
-              <label className="flex flex-col gap-1.5">
-                <span className="text-meta font-semibold">Mot de passe actuel</span>
-                <input
+          {({ errors, processing }) => {
+            const differents = confirmation.length > 0 && confirmation !== nouveau
+            return (
+              <>
+                <span className="text-moyen font-bold">Changer de mot de passe</span>
+                <ChampMotDePasse
+                  libelle="Mot de passe actuel"
                   name="actuel"
-                  type="password"
                   autoComplete="current-password"
-                  aria-invalid={errors.actuel ? true : undefined}
-                  aria-describedby={errors.actuel ? 'err-actuel' : undefined}
-                  className={`${champ} ${errors.actuel ? 'border-danger' : 'border-bordure-champ'}`}
-                />
-                <Erreur id="err-actuel">
-                  {errors.actuel &&
+                  erreur={
+                    errors.actuel &&
                     (errors.actuel.includes('incorrect')
                       ? errors.actuel
-                      : 'Saisissez votre mot de passe actuel.')}
-                </Erreur>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className="text-meta font-semibold">Nouveau mot de passe</span>
-                <input
+                      : 'Saisissez votre mot de passe actuel.')
+                  }
+                />
+                <ChampMotDePasse
+                  libelle="Nouveau mot de passe"
                   name="nouveau"
-                  type="password"
                   autoComplete="new-password"
                   value={nouveau}
                   onChange={(e) => setNouveau(e.target.value)}
-                  aria-invalid={errors.nouveau ? true : undefined}
-                  aria-describedby="aide-nouveau"
-                  className={`${champ} ${errors.nouveau ? 'border-danger' : 'border-bordure-champ'}`}
-                />
-                <span
-                  id="aide-nouveau"
-                  className={
-                    nouveau.length >= LONGUEUR_MIN
-                      ? 'text-leg text-succes'
-                      : 'text-leg text-encre-4'
-                  }
-                >
-                  {nouveau.length} / {LONGUEUR_MIN} caractères minimum
-                </span>
-                <Erreur id="err-nouveau">
-                  {errors.nouveau &&
+                  erreur={
+                    errors.nouveau &&
                     (errors.nouveau.includes('différent')
                       ? errors.nouveau
-                      : errors.nouveau.toLowerCase().includes('confirm')
-                        ? 'Les deux mots de passe ne correspondent pas.'
-                        : `${LONGUEUR_MIN} caractères minimum.`)}
-                </Erreur>
-              </label>
-              <label className="flex flex-col gap-1.5">
-                <span className="text-meta font-semibold">Confirmer</span>
-                <input
-                  name="confirmation"
-                  type="password"
-                  autoComplete="new-password"
-                  className={`${champ} border-bordure-champ`}
+                      : `${LONGUEUR_MIN} caractères minimum.`)
+                  }
+                  aide={
+                    <span className={nouveau.length >= LONGUEUR_MIN ? 'text-succes' : undefined}>
+                      {nouveau.length} / {LONGUEUR_MIN} caractères minimum
+                    </span>
+                  }
                 />
-              </label>
-              <button
-                type="submit"
-                disabled={processing}
-                className="h-[46px] self-start rounded-bouton bg-accent px-5 text-corps font-bold text-white disabled:opacity-60"
-              >
-                Enregistrer
-              </button>
-            </>
-          )}
+                <ChampMotDePasse
+                  libelle="Confirmer le nouveau mot de passe"
+                  name="confirmation"
+                  autoComplete="new-password"
+                  value={confirmation}
+                  onChange={(e) => setConfirmation(e.target.value)}
+                  erreur={
+                    differents || (errors as Record<string, string | undefined>).confirmation
+                      ? 'Les deux mots de passe ne correspondent pas.'
+                      : undefined
+                  }
+                  aide={
+                    confirmation.length > 0 && !differents ? (
+                      <span className="text-succes">Les deux mots de passe correspondent.</span>
+                    ) : undefined
+                  }
+                />
+                <button
+                  type="submit"
+                  disabled={processing}
+                  className="flex h-[46px] items-center gap-2 self-start rounded-bouton bg-accent px-5 text-corps font-bold text-white disabled:opacity-60"
+                >
+                  {processing && <Icone nom="spinner" tourne />}
+                  {processing ? 'Enregistrement…' : 'Enregistrer'}
+                </button>
+              </>
+            )
+          }}
         </Form>
 
         <div className="flex flex-wrap gap-2.5">

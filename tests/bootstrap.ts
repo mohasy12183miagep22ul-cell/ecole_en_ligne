@@ -44,7 +44,20 @@ export const plugins: Config['plugins'] = [
  */
 export const runnerHooks: Required<Pick<Config, 'setup' | 'teardown'>> = {
   // Base de test PostgreSQL (DB_DATABASE de .env.test) remise à neuf.
-  setup: [() => testUtils.db().migrate()],
+  setup: [
+    () => {
+      // Garde-fou : les tests annulent toutes les migrations en fin de série.
+      // Ils ne tournent donc jamais ailleurs que sur une base de test.
+      const base = process.env.DB_DATABASE ?? ''
+      if (!base.endsWith('_test')) {
+        console.error(
+          `Tests refusés sur la base « ${base} » : seule une base dont le nom finit par _test est autorisée.`
+        )
+        process.exit(1)
+      }
+    },
+    () => testUtils.db().migrate(),
+  ],
   teardown: [],
 }
 
