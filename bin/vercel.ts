@@ -11,6 +11,7 @@
 
 import 'reflect-metadata'
 import { Ignitor } from '@adonisjs/core/ignitor'
+import { fileURLToPath } from 'node:url'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
 /**
@@ -32,6 +33,12 @@ if (process.env.PGHOST) {
 }
 
 const APP_ROOT = new URL('../', import.meta.url)
+
+/**
+ * Vercel lance la fonction depuis la racine du dépôt : les chemins relatifs
+ * (tâches de la file d'attente…) doivent partir de `build/`.
+ */
+process.chdir(fileURLToPath(APP_ROOT))
 
 const IMPORTER = (filePath: string) => {
   if (filePath.startsWith('./') || filePath.startsWith('../')) {

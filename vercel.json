@@ -2,13 +2,13 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "npm ci --include=dev",
-  "buildCommand": "node ace build && cd build && npm ci --omit=dev",
-  "outputDirectory": "build/public",
+  "buildCommand": "node ace build && cd build && npm ci --omit=dev && cp -r public statique",
+  "outputDirectory": "build/statique",
   "regions": ["fra1"],
   "functions": {
     "api/index.js": {
       "includeFiles": "build/**",
-      "excludeFiles": "build/**/*.{map,md,d.ts}",
+      "excludeFiles": "build/{statique/**,**/*.map,**/*.md,**/*.d.ts}",
       "maxDuration": 60
     }
   },
