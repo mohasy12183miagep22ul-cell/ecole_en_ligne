@@ -53,6 +53,7 @@ tests ni `migration:fresh`.
 | `DB_*` | rien à saisir si la base est créée par l'intégration Neon de Vercel : `bin/vercel.ts` reprend `PGHOST`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` (adresse mutualisée) et active `DB_SSL` |
 | `PROXY_DE_CONFIANCE` | `true` (adresse IP réelle au journal) |
 | `MAIL_MAILER` | `journal` (ou `smtp` + `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USERNAME`, `SMTP_PASSWORD`) |
+| `AFFICHER_CODE_VERIFICATION` | `true` tant que `MAIL_MAILER=journal` : code de second facteur affiché à l'écran (provisoire, à retirer avec l'envoi réel) |
 | `MAIL_FROM_NAME` / `MAIL_FROM_ADDRESS` | nom et adresse d'expédition |
 | `SMTP_HOST` / `SMTP_PORT` | `localhost` / `1025` si `journal` (exigées) |
 | `DRIVE_DISK` | `fs` |

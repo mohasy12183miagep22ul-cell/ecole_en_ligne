@@ -27,7 +27,7 @@ export default function DoubleFacteur({
         <div className="flex items-center gap-2.5 rounded-champ bg-info-fond px-3 py-2.5 text-meta text-info">
           <Icone nom="circle-info" />
           <span>
-            Développement — aucun courriel envoyé. Code :{' '}
+            Aucun courriel envoyé pour le moment. Code :{' '}
             <strong className="tracking-[0.2em]">{codeDeveloppement}</strong>
           </span>
         </div>
