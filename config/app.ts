@@ -20,6 +20,12 @@ export const http = defineConfig({
   generateRequestId: true,
 
   /**
+   * Derrière le proxy de l'hébergeur, qui remplace X-Forwarded-For par
+   * l'adresse réelle du client. Jamais activé sur un serveur exposé en direct.
+   */
+  ...(env.get('PROXY_DE_CONFIANCE') ? { trustProxy: () => true } : {}),
+
+  /**
    * Allow HTTP method spoofing via the "_method" form/query parameter.
    * This lets HTML forms target PUT/PATCH/DELETE routes while still
    * submitting with POST.

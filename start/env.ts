@@ -31,6 +31,12 @@ export default await Env.create(new URL('../', import.meta.url), {
   DB_USER: Env.schema.string(),
   DB_PASSWORD: Env.schema.secret(),
   DB_DATABASE: Env.schema.string(),
+  // Connexion chiffrée, exigée par une base hébergée (Neon…)
+  DB_SSL: Env.schema.boolean.optional(),
+
+  // Derrière le proxy d'un hébergeur (Vercel) : l'adresse IP du client vient
+  // de l'en-tête X-Forwarded-For posé par ce proxy (journal RG22)
+  PROXY_DE_CONFIANCE: Env.schema.boolean.optional(),
 
   // Courriel : `journal` en développement (aucun envoi), `smtp` ailleurs
   MAIL_MAILER: Env.schema.enum(['smtp', 'journal'] as const),
@@ -44,6 +50,9 @@ export default await Env.create(new URL('../', import.meta.url), {
 
   // Stockage des fichiers (pièces jointes, photos, PDF générés)
   DRIVE_DISK: Env.schema.enum(['fs'] as const),
+  // Dossier du stockage ; par défaut `storage/`. Sur Vercel, seul /tmp est
+  // inscriptible, et il n'est pas conservé
+  DRIVE_DOSSIER: Env.schema.string.optional(),
 
   // File d'attente des traitements lourds (PDF, exports, générations de masse)
   QUEUE_DRIVER: Env.schema.enum(['database', 'sync'] as const),

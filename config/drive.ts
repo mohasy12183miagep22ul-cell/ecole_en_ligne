@@ -15,7 +15,9 @@ const driveConfig = defineConfig({
 
   services: {
     fs: services.fs({
-      location: app.inTest ? app.tmpPath('stockage_tests') : app.makePath('storage'),
+      location: app.inTest
+        ? app.tmpPath('stockage_tests')
+        : (env.get('DRIVE_DOSSIER') ?? app.makePath('storage')),
       serveFiles: false,
       visibility: 'private',
     }),
