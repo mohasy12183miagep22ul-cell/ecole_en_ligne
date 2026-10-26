@@ -25,11 +25,21 @@ export type ScannedRoutes = {
     'enseignant.classes': { paramsTuple?: []; params?: {} }
     'enseignant.evaluations': { paramsTuple?: []; params?: {} }
     'enseignant.nouvelle_evaluation': { paramsTuple?: []; params?: {} }
+    'enseignant.evaluations.store': { paramsTuple?: []; params?: {} }
     'enseignant.grille': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'enseignant.evaluations.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'enseignant.evaluations.notes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'enseignant.evaluations.soumettre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'enseignant.appreciations': { paramsTuple?: []; params?: {} }
+    'enseignant.appreciations.store': { paramsTuple?: []; params?: {} }
     'enseignant.recapitulatif': { paramsTuple?: []; params?: {} }
     'direction.accueil': { paramsTuple?: []; params?: {} }
     'direction.validation': { paramsTuple?: []; params?: {} }
+    'direction.evaluations.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'direction.evaluations.renvoyer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'direction.evaluations.deverrouiller': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'direction.suivi': { paramsTuple?: []; params?: {} }
+    'direction.derogations.store': { paramsTuple?: []; params?: {} }
     'direction.deliberation': { paramsTuple?: []; params?: {} }
     'direction.bulletins': { paramsTuple?: []; params?: {} }
     'direction.inscriptions': { paramsTuple?: []; params?: {} }
@@ -110,6 +120,7 @@ export type ScannedRoutes = {
     'enseignant.recapitulatif': { paramsTuple?: []; params?: {} }
     'direction.accueil': { paramsTuple?: []; params?: {} }
     'direction.validation': { paramsTuple?: []; params?: {} }
+    'direction.suivi': { paramsTuple?: []; params?: {} }
     'direction.deliberation': { paramsTuple?: []; params?: {} }
     'direction.bulletins': { paramsTuple?: []; params?: {} }
     'direction.inscriptions': { paramsTuple?: []; params?: {} }
@@ -153,6 +164,7 @@ export type ScannedRoutes = {
     'enseignant.recapitulatif': { paramsTuple?: []; params?: {} }
     'direction.accueil': { paramsTuple?: []; params?: {} }
     'direction.validation': { paramsTuple?: []; params?: {} }
+    'direction.suivi': { paramsTuple?: []; params?: {} }
     'direction.deliberation': { paramsTuple?: []; params?: {} }
     'direction.bulletins': { paramsTuple?: []; params?: {} }
     'direction.inscriptions': { paramsTuple?: []; params?: {} }
@@ -184,6 +196,14 @@ export type ScannedRoutes = {
     'reinitialisation.update': { paramsTuple: [ParamValue]; params: {'jeton': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'profil.mot_de_passe': { paramsTuple?: []; params?: {} }
+    'enseignant.evaluations.store': { paramsTuple?: []; params?: {} }
+    'enseignant.evaluations.notes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'enseignant.evaluations.soumettre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'enseignant.appreciations.store': { paramsTuple?: []; params?: {} }
+    'direction.evaluations.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'direction.evaluations.renvoyer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'direction.evaluations.deverrouiller': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'direction.derogations.store': { paramsTuple?: []; params?: {} }
     'direction.inscriptions.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'direction.inscriptions.refuser': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'scolarite.eleves.statut': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -211,6 +231,7 @@ export type ScannedRoutes = {
     'admin.comptes.store': { paramsTuple?: []; params?: {} }
   }
   PUT: {
+    'enseignant.evaluations.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'scolarite.eleves.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'scolarite.tuteurs.update': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'tuteurId': ParamValue} }
     'scolarite.tuteurs.principal': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'tuteurId': ParamValue} }

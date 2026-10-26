@@ -1,16 +1,15 @@
 import Coque from '~/layouts/coque'
 import Icone from '~/components/ui/icone'
-import { notifier } from '~/components/ui/toast'
-import { cx, num } from '~/lib/format'
-import { ajouterEval, journaliser } from '~/demo/store'
-import { TYPES } from '~/demo/donnees'
+import EtatVide from '~/components/ui/etat_vide'
+import { cx } from '~/lib/format'
+import { ICONE_TYPE, type TypeEvaluation } from '~/lib/notes'
 import { router, usePage } from '@inertiajs/react'
 import { useState, type ReactNode } from 'react'
 
 const champ =
   'h-12 rounded-bouton border border-bordure-champ bg-champ px-3.5 text-moyen text-encre outline-none focus:border-accent focus:bg-white'
 
-type Erreurs = Partial<Record<'titre' | 'date' | 'max' | 'poids', string>>
+type Periode = { id: number; libelle: string; debut: string; fin: string; ouverte: boolean }
 
 function Erreur({ children }: { children?: ReactNode }) {
   return children ? (
@@ -20,57 +19,68 @@ function Erreur({ children }: { children?: ReactNode }) {
   ) : null
 }
 
-export default function NouvelleEvaluation() {
+export default function NouvelleEvaluation({
+  annee,
+  affectations,
+  periodes,
+  periodeCourante,
+  types,
+  affectationChoisie,
+}: {
+  annee: { id: number; libelle: string } | null
+  affectations: Array<{ id: number; libelle: string; noteMax: number }>
+  periodes: Periode[]
+  periodeCourante: number | null
+  types: Array<{ cle: TypeEvaluation; libelle: string }>
+  affectationChoisie: number | null
+}) {
   const { props } = usePage()
+  const serveur = (props.errors ?? {}) as Record<string, string | undefined>
+  const premiere = affectations.find((a) => a.id === affectationChoisie) ?? affectations[0]
   const [f, setF] = useState({
-    classe: '3e A',
-    type: 'Devoir surveillé',
+    affectationId: String(premiere?.id ?? ''),
+    periodeId: String(periodeCourante ?? periodes[0]?.id ?? ''),
+    type: 'devoir' as TypeEvaluation,
     titre: '',
-    date: '2026-10-23',
-    max: '20',
+    date: new Date().toISOString().slice(0, 10),
+    noteMax: String(premiere?.noteMax ?? 20),
     poids: '1',
   })
-  const [err, setErr] = useState<Erreurs>({})
-  const maj = (k: keyof typeof f) => (e: { target: { value: string } }) => {
+  const [envoi, setEnvoi] = useState(false)
+  const maj = (k: keyof typeof f) => (e: { target: { value: string } }) =>
     setF({ ...f, [k]: e.target.value })
-    setErr({ ...err, [k]: undefined })
-  }
+  const periode = periodes.find((p) => String(p.id) === f.periodeId)
 
-  const creer = () => {
-    const e: Erreurs = {}
-    if (f.titre.trim().length < 3) e.titre = 'Le titre est obligatoire (3 caractères minimum).'
-    if (!f.date) e.date = 'Choisissez la date de l’évaluation.'
-    const max = num(f.max)
-    if (max === null || max < 1 || max > 100 || !Number.isInteger(max))
-      e.max = 'Entier entre 1 et 100.'
-    const poids = num(f.poids)
-    if (poids === null || poids <= 0) e.poids = 'Le poids doit être strictement positif.'
-    if (Object.keys(e).length) return setErr(e)
-
-    const id = `n${Date.now()}`
-    ajouterEval({
-      id,
-      classe: f.classe,
-      matiere: 'MA',
-      titre: f.titre.trim(),
-      type: f.type,
-      date: f.date.split('-').reverse().join('/'),
-      max: max!,
-      poids: poids!,
-      etat: 'brouillon',
-      mine: true,
-      enseignant: 'I. Sow',
-    })
-    journaliser(
-      props.user?.fullName ?? '',
-      'Création d’évaluation',
-      `${f.titre.trim()} · ${f.classe}`,
-      '',
-      'Brouillon'
+  if (!annee || affectations.length === 0) {
+    return (
+      <Coque
+        espace="enseignant"
+        titre="Nouvelle évaluation"
+        retour={{ href: '/enseignant/evaluations', libelle: 'Mes évaluations' }}
+      >
+        <EtatVide
+          icone="clipboard-list"
+          titre="Aucune classe confiée"
+          texte="Une évaluation se crée sur une de vos affectations (classe et matière) de l’année active."
+        />
+      </Coque>
     )
-    notifier('Évaluation créée — saisissez les notes')
-    router.visit(`/enseignant/evaluations/${id}`)
   }
+
+  const creer = () =>
+    router.post(
+      '/enseignant/evaluations',
+      {
+        affectationId: Number(f.affectationId),
+        periodeId: Number(f.periodeId),
+        type: f.type,
+        titre: f.titre.trim(),
+        date: f.date,
+        noteMax: Number(f.noteMax.replace(',', '.')),
+        poids: Number(f.poids.replace(',', '.')),
+      },
+      { onStart: () => setEnvoi(true), onFinish: () => setEnvoi(false) }
+    )
 
   return (
     <Coque
@@ -81,30 +91,59 @@ export default function NouvelleEvaluation() {
       <div className="flex max-w-[640px] flex-col gap-[18px] rounded-carte border border-bordure bg-white p-5">
         <label className="flex flex-col gap-1.5">
           <span className="text-meta font-semibold">Classe et matière</span>
-          <select value={f.classe} onChange={maj('classe')} className={cx(champ, 'px-3')}>
-            <option value="3e A">3e A — Mathématiques</option>
-            <option value="3e B">3e B — Mathématiques</option>
-            <option value="4e A">4e A — Mathématiques</option>
+          <select
+            value={f.affectationId}
+            onChange={(e) => {
+              const a = affectations.find((x) => String(x.id) === e.target.value)
+              setF({
+                ...f,
+                affectationId: e.target.value,
+                noteMax: String(a?.noteMax ?? f.noteMax),
+              })
+            }}
+            className={cx(champ, 'px-3')}
+          >
+            {affectations.map((a) => (
+              <option key={a.id} value={a.id}>
+                {a.libelle}
+              </option>
+            ))}
           </select>
         </label>
-        <div className="flex flex-col gap-1.5">
+        <label className="flex flex-col gap-1.5">
           <span className="text-meta font-semibold">Période</span>
-          <div className="flex h-12 items-center justify-between rounded-bouton bg-neutre px-3.5 text-corps">
-            <span>1er trimestre 2026-2027</span>
-            <span className="text-leg font-semibold text-succes">Saisie ouverte</span>
-          </div>
-        </div>
+          <select value={f.periodeId} onChange={maj('periodeId')} className={cx(champ, 'px-3')}>
+            {periodes.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.libelle} {annee.libelle} · {p.ouverte ? 'saisie ouverte' : 'saisie fermée'}
+              </option>
+            ))}
+          </select>
+          {periode && (
+            <span
+              className={cx(
+                'text-leg font-semibold',
+                periode.ouverte ? 'text-succes' : 'text-attention'
+              )}
+            >
+              {periode.ouverte
+                ? `Saisie ouverte du ${periode.debut} au ${periode.fin}`
+                : `Saisie fermée (fenêtre du ${periode.debut} au ${periode.fin}) : une dérogation de la direction est nécessaire (RG13).`}
+            </span>
+          )}
+          <Erreur>{serveur.periodeId}</Erreur>
+        </label>
         <div className="flex flex-col gap-2">
           <span className="text-meta font-semibold">Type d’évaluation</span>
           <div role="group" aria-label="Type d’évaluation" className="flex flex-wrap gap-2">
-            {TYPES.map(([t, ic]) => {
-              const on = f.type === t
+            {types.map((t) => {
+              const on = f.type === t.cle
               return (
                 <button
-                  key={t}
+                  key={t.cle}
                   type="button"
                   aria-pressed={on}
-                  onClick={() => setF({ ...f, type: t })}
+                  onClick={() => setF({ ...f, type: t.cle })}
                   className={cx(
                     'flex h-10 items-center gap-2 rounded-champ border px-3 text-meta font-semibold',
                     on
@@ -112,8 +151,8 @@ export default function NouvelleEvaluation() {
                       : 'border-bordure-champ bg-white text-encre-2'
                   )}
                 >
-                  <Icone nom={ic} />
-                  {t}
+                  <Icone nom={ICONE_TYPE[t.cle]} />
+                  {t.libelle}
                 </button>
               )
             })}
@@ -125,10 +164,10 @@ export default function NouvelleEvaluation() {
             value={f.titre}
             onChange={maj('titre')}
             placeholder="Ex. Devoir surveillé n°3"
-            aria-invalid={err.titre ? true : undefined}
+            aria-invalid={serveur.titre ? true : undefined}
             className={champ}
           />
-          <Erreur>{err.titre}</Erreur>
+          <Erreur>{serveur.titre && 'Le titre est obligatoire (3 caractères minimum).'}</Erreur>
         </label>
         <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3">
           <label className="flex flex-col gap-1.5">
@@ -139,17 +178,22 @@ export default function NouvelleEvaluation() {
               onChange={maj('date')}
               className={cx(champ, 'px-3')}
             />
-            <Erreur>{err.date}</Erreur>
+            <Erreur>{serveur.date && 'Choisissez la date de l’évaluation.'}</Erreur>
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="text-meta font-semibold">Note maximale</span>
-            <input inputMode="numeric" value={f.max} onChange={maj('max')} className={champ} />
-            <Erreur>{err.max}</Erreur>
+            <input
+              inputMode="decimal"
+              value={f.noteMax}
+              onChange={maj('noteMax')}
+              className={champ}
+            />
+            <Erreur>{serveur.noteMax && 'Nombre entre 1 et 100.'}</Erreur>
           </label>
           <label className="flex flex-col gap-1.5">
             <span className="text-meta font-semibold">Poids dans la période</span>
             <input inputMode="decimal" value={f.poids} onChange={maj('poids')} className={champ} />
-            <Erreur>{err.poids}</Erreur>
+            <Erreur>{serveur.poids && 'Le poids doit être strictement positif.'}</Erreur>
           </label>
         </div>
         <div className="flex justify-end gap-2.5">
@@ -162,8 +206,9 @@ export default function NouvelleEvaluation() {
           </button>
           <button
             type="button"
+            disabled={envoi}
             onClick={creer}
-            className="h-12 rounded-bouton bg-accent px-[22px] text-corps font-bold text-white"
+            className="h-12 rounded-bouton bg-accent px-[22px] text-corps font-bold text-white disabled:opacity-60"
           >
             Créer et saisir les notes
           </button>

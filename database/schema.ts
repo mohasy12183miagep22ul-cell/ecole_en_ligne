@@ -70,6 +70,72 @@ export class AnneesScolaireSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class AppreciationSchema extends BaseModel {
+  static $columns = [
+    'auteurId',
+    'createdAt',
+    'deletedAt',
+    'eleveId',
+    'id',
+    'matiereId',
+    'periodeId',
+    'texte',
+    'updatedAt',
+  ] as const
+  $columns = AppreciationSchema.$columns
+  @column()
+  declare auteurId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare eleveId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare matiereId: number
+  @column()
+  declare periodeId: number
+  @column()
+  declare texte: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class CacheMoyenneSchema extends BaseModel {
+  static $columns = [
+    'calculeLe',
+    'classeId',
+    'createdAt',
+    'deletedAt',
+    'empreinte',
+    'id',
+    'periodeId',
+    'resultat',
+    'updatedAt',
+  ] as const
+  $columns = CacheMoyenneSchema.$columns
+  @column.dateTime()
+  declare calculeLe: DateTime
+  @column()
+  declare classeId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare empreinte: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare periodeId: number
+  @column()
+  declare resultat: any
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class ClassSchema extends BaseModel {
   static $columns = [
     'anneeId',
@@ -113,6 +179,39 @@ export class CompteursMatriculeSchema extends BaseModel {
   declare annee: number
   @column()
   declare dernier: number
+}
+
+export class DerogationsSaisieSchema extends BaseModel {
+  static $columns = [
+    'accordeePar',
+    'affectationId',
+    'createdAt',
+    'deletedAt',
+    'id',
+    'jusquAu',
+    'motif',
+    'periodeId',
+    'updatedAt',
+  ] as const
+  $columns = DerogationsSaisieSchema.$columns
+  @column()
+  declare accordeePar: number
+  @column()
+  declare affectationId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column.date()
+  declare jusquAu: DateTime
+  @column()
+  declare motif: string
+  @column()
+  declare periodeId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
 
 export class DocumentSchema extends BaseModel {
@@ -233,6 +332,60 @@ export class EleveSchema extends BaseModel {
   declare statutMotif: string | null
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class EvaluationSchema extends BaseModel {
+  static $columns = [
+    'affectationId',
+    'createdAt',
+    'date',
+    'deletedAt',
+    'etat',
+    'id',
+    'motifRetour',
+    'noteMax',
+    'periodeId',
+    'poids',
+    'soumiseLe',
+    'titre',
+    'type',
+    'updatedAt',
+    'valideeLe',
+    'valideePar',
+  ] as const
+  $columns = EvaluationSchema.$columns
+  @column()
+  declare affectationId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.date()
+  declare date: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare etat: any
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare motifRetour: string | null
+  @column()
+  declare noteMax: string
+  @column()
+  declare periodeId: number
+  @column()
+  declare poids: string
+  @column.dateTime()
+  declare soumiseLe: DateTime | null
+  @column()
+  declare titre: string
+  @column()
+  declare type: any
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column.dateTime()
+  declare valideeLe: DateTime | null
+  @column()
+  declare valideePar: number | null
 }
 
 export class FichiersGenereSchema extends BaseModel {
@@ -515,6 +668,42 @@ export class NiveauSchema extends BaseModel {
   declare ordre: number
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
+}
+
+export class NoteSchema extends BaseModel {
+  static $columns = [
+    'absent',
+    'createdAt',
+    'deletedAt',
+    'eleveId',
+    'evaluationId',
+    'id',
+    'observation',
+    'saisiePar',
+    'updatedAt',
+    'valeur',
+  ] as const
+  $columns = NoteSchema.$columns
+  @column()
+  declare absent: boolean
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare eleveId: number
+  @column()
+  declare evaluationId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare observation: string | null
+  @column()
+  declare saisiePar: number | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare valeur: string | null
 }
 
 export class ParametresEtablissementSchema extends BaseModel {

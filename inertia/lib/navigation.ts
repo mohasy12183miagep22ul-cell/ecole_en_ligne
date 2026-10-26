@@ -46,6 +46,7 @@ export const espaces: Record<Espace, ConfigEspace> = {
       { libelle: 'Tableau de bord', icone: 'gauge', href: '/direction', exact: true },
       { libelle: 'Inscriptions', icone: 'user-plus', href: '/direction/inscriptions' },
       { libelle: 'Validation', icone: 'circle-check', href: '/direction/validation' },
+      { libelle: 'Suivi des saisies', icone: 'clipboard-list', href: '/direction/suivi' },
       { libelle: 'Délibération', icone: 'scale-balanced', href: '/direction/deliberation' },
       { libelle: 'Bulletins', icone: 'file-export', href: '/direction/bulletins' },
       { libelle: 'Élèves', icone: 'user-graduate', href: '/scolarite/eleves' },

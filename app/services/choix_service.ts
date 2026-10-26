@@ -1,4 +1,5 @@
 import User from '#models/user'
+import Classe from '#models/classe'
 import AnneeScolaire from '#models/annee_scolaire'
 
 /**
@@ -19,5 +20,14 @@ export default class ChoixService {
   static async annees() {
     const annees = await AnneeScolaire.query().whereNull('deleted_at').orderBy('date_debut', 'desc')
     return annees.map((a) => ({ id: a.id, libelle: a.libelle, etat: a.etat }))
+  }
+
+  /** Classes d'une année, par libellé. */
+  static async classes(anneeId: number) {
+    const classes = await Classe.query()
+      .where('annee_id', anneeId)
+      .whereNull('deleted_at')
+      .orderBy('libelle')
+    return classes.map((c) => ({ id: c.id, libelle: c.libelle }))
   }
 }

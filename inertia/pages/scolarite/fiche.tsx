@@ -7,7 +7,7 @@ import EtatVide from '~/components/ui/etat_vide'
 import Champ, { Selection, ZoneTexte } from '~/components/ui/champ'
 import { notifier } from '~/components/ui/toast'
 import { useFeuille } from '~/components/ui/feuille'
-import { cx } from '~/lib/format'
+import { cx, fmt, fmtv, rang } from '~/lib/format'
 import { sansVides } from '~/lib/formulaire'
 import {
   LIBELLES_ETAT,
@@ -396,6 +396,7 @@ function LignePiece({
 export default function FicheEleve({
   onglet,
   droits,
+  resultats,
   eleve,
   tuteurs,
   inscriptions,
@@ -403,6 +404,18 @@ export default function FicheEleve({
 }: {
   onglet: string
   droits: { valider: boolean; reactiver: boolean }
+  resultats: Array<{
+    periode: string
+    matieres: Array<{
+      libelle: string
+      coefficient: number
+      moyenne: number | null
+      moyenneClasse: number | null
+    }>
+    generale: number | null
+    rang: number | null
+    effectif: number
+  }>
   eleve: Eleve
   tuteurs: Tuteur[]
   inscriptions: Inscription[]
@@ -836,14 +849,53 @@ export default function FicheEleve({
               ))
             ))}
 
-          {actif === 'notes' && (
-            <EtatVide
-              cadre={false}
-              icone="chart-simple"
-              titre="Aucune note pour l’instant"
-              texte="Les notes apparaîtront ici dès que les enseignants auront saisi leurs évaluations."
-            />
-          )}
+          {actif === 'notes' &&
+            (resultats.every((r) => r.generale === null) ? (
+              <EtatVide
+                cadre={false}
+                icone="chart-simple"
+                titre="Aucune note pour l’instant"
+                texte="Les moyennes apparaîtront ici dès que les enseignants auront saisi leurs évaluations."
+              />
+            ) : (
+              <div className="flex flex-col gap-4">
+                <span className="text-leg text-encre-3">
+                  Moyennes provisoires sur 20 : les évaluations non encore validées par la direction
+                  comptent. Rien de ceci n’est visible par la famille avant publication du bulletin.
+                </span>
+                {resultats
+                  .filter((r) => r.generale !== null)
+                  .map((r) => (
+                    <section key={r.periode} aria-label={r.periode} className="flex flex-col gap-2">
+                      <div className="flex items-baseline justify-between gap-2">
+                        <span className="text-moyen font-bold">{r.periode}</span>
+                        <span className="text-meta">
+                          Moyenne générale{' '}
+                          <strong className="text-titre-carte">{fmt(r.generale)}</strong>
+                          {r.rang !== null && ` · ${rang(r.rang)} / ${r.effectif}`}
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,240px),1fr))] gap-2.5">
+                        {r.matieres.map((m) => (
+                          <div
+                            key={m.libelle}
+                            className="flex items-center gap-2.5 rounded-champ bg-entete px-3 py-2.5"
+                          >
+                            <span className="flex-1 text-meta">
+                              {m.libelle}{' '}
+                              <span className="text-encre-3">· coef {fmtv(m.coefficient)}</span>
+                            </span>
+                            <span className="text-leg text-encre-3">
+                              classe {fmt(m.moyenneClasse)}
+                            </span>
+                            <strong>{fmt(m.moyenne)}</strong>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+              </div>
+            ))}
 
           {actif === 'bulletins' && (
             <EtatVide

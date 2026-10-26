@@ -33,15 +33,31 @@ export interface ApiDefinition {
   }
   enseignant: {
     classes: typeof routes['enseignant.classes']
-    evaluations: typeof routes['enseignant.evaluations']
+    evaluations: typeof routes['enseignant.evaluations'] & {
+      store: typeof routes['enseignant.evaluations.store']
+      update: typeof routes['enseignant.evaluations.update']
+      notes: typeof routes['enseignant.evaluations.notes']
+      soumettre: typeof routes['enseignant.evaluations.soumettre']
+    }
     nouvelleEvaluation: typeof routes['enseignant.nouvelle_evaluation']
     grille: typeof routes['enseignant.grille']
-    appreciations: typeof routes['enseignant.appreciations']
+    appreciations: typeof routes['enseignant.appreciations'] & {
+      store: typeof routes['enseignant.appreciations.store']
+    }
     recapitulatif: typeof routes['enseignant.recapitulatif']
   }
   direction: {
     accueil: typeof routes['direction.accueil']
     validation: typeof routes['direction.validation']
+    evaluations: {
+      valider: typeof routes['direction.evaluations.valider']
+      renvoyer: typeof routes['direction.evaluations.renvoyer']
+      deverrouiller: typeof routes['direction.evaluations.deverrouiller']
+    }
+    suivi: typeof routes['direction.suivi']
+    derogations: {
+      store: typeof routes['direction.derogations.store']
+    }
     deliberation: typeof routes['direction.deliberation']
     bulletins: typeof routes['direction.bulletins']
     inscriptions: typeof routes['direction.inscriptions'] & {

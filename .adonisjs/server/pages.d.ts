@@ -29,6 +29,7 @@ declare module '@adonisjs/inertia/types' {
     'direction/bulletins': ExtractProps<(typeof import('../../inertia/pages/direction/bulletins.tsx'))['default']>
     'direction/deliberation': ExtractProps<(typeof import('../../inertia/pages/direction/deliberation.tsx'))['default']>
     'direction/inscriptions': ExtractProps<(typeof import('../../inertia/pages/direction/inscriptions.tsx'))['default']>
+    'direction/suivi': ExtractProps<(typeof import('../../inertia/pages/direction/suivi.tsx'))['default']>
     'direction/validation': ExtractProps<(typeof import('../../inertia/pages/direction/validation.tsx'))['default']>
     'documents': ExtractProps<(typeof import('../../inertia/pages/documents.tsx'))['default']>
     'enseignant/appreciations': ExtractProps<(typeof import('../../inertia/pages/enseignant/appreciations.tsx'))['default']>

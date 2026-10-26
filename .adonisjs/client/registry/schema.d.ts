@@ -249,9 +249,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['classes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['classes']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['classes']>>>
     }
   }
   'enseignant.evaluations': {
@@ -262,9 +262,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['index']>>>
     }
   }
   'enseignant.nouvelle_evaluation': {
@@ -275,9 +275,22 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['create']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['create']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['create']>>>
+    }
+  }
+  'enseignant.evaluations.store': {
+    methods: ["POST"]
+    pattern: '/enseignant/evaluations'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/notes').evaluationValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/notes').evaluationValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'enseignant.grille': {
@@ -288,9 +301,48 @@ export interface Registry {
       paramsTuple: [ParamValue]
       params: { id: ParamValue }
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['show']>>>
+    }
+  }
+  'enseignant.evaluations.update': {
+    methods: ["PUT"]
+    pattern: '/enseignant/evaluations/:id'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/notes').modifierEvaluationValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/notes').modifierEvaluationValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['update']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['update']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'enseignant.evaluations.notes': {
+    methods: ["POST"]
+    pattern: '/enseignant/evaluations/:id/notes'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/notes').saisiesValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/notes').saisiesValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['notes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['notes']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['notes']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'enseignant.evaluations.soumettre': {
+    methods: ["POST"]
+    pattern: '/enseignant/evaluations/:id/soumettre'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['soumettre']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['soumettre']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/evaluations_controller').default['soumettre']>>>
     }
   }
   'enseignant.appreciations': {
@@ -301,9 +353,22 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['index']>>>
+    }
+  }
+  'enseignant.appreciations.store': {
+    methods: ["POST"]
+    pattern: '/enseignant/appreciations'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/notes').appreciationValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/notes').appreciationValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['store']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['store']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'enseignant.recapitulatif': {
@@ -314,9 +379,9 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['recapitulatif']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['recapitulatif']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/appreciations_controller').default['recapitulatif']>>>
     }
   }
   'direction.accueil': {
@@ -340,9 +405,74 @@ export interface Registry {
       paramsTuple: []
       params: {}
       query: {}
-      response: unknown
-      errorResponse: unknown
-      rawResponse: ExtractRawResponse<unknown>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['index']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['index']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['index']>>>
+    }
+  }
+  'direction.evaluations.valider': {
+    methods: ["POST"]
+    pattern: '/direction/evaluations/:id/valider'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['valider']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['valider']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['valider']>>>
+    }
+  }
+  'direction.evaluations.renvoyer': {
+    methods: ["POST"]
+    pattern: '/direction/evaluations/:id/renvoyer'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['renvoyer']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['renvoyer']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['renvoyer']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'direction.evaluations.deverrouiller': {
+    methods: ["POST"]
+    pattern: '/direction/evaluations/:id/deverrouiller'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/scolarite').motifValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['deverrouiller']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['deverrouiller']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['deverrouiller']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'direction.suivi': {
+    methods: ["GET","HEAD"]
+    pattern: '/direction/suivi'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['suivi']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['suivi']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['suivi']>>>
+    }
+  }
+  'direction.derogations.store': {
+    methods: ["POST"]
+    pattern: '/direction/derogations'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/notes').derogationValidator)>>
+      paramsTuple: []
+      params: {}
+      query: ExtractQuery<InferInput<(typeof import('#validators/notes').derogationValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['derogation']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['derogation']>>> | { status: 422; response: { errors: SimpleError[] } }
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/validation_evaluations_controller').default['derogation']>>> | { status: 422; response: { errors: SimpleError[] } }
     }
   }
   'direction.deliberation': {

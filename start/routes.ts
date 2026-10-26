@@ -85,19 +85,21 @@ router
 
 router
   .group(() => {
-    router.on('classes').renderInertia('enseignant/classes', {}).as('classes')
-    router.on('evaluations').renderInertia('enseignant/evaluations', {}).as('evaluations')
+    router.get('classes', [controllers.Evaluations, 'classes']).as('classes')
+    router.get('evaluations', [controllers.Evaluations, 'index']).as('evaluations')
     router
-      .on('evaluations/nouvelle')
-      .renderInertia('enseignant/nouvelle_evaluation', {})
+      .get('evaluations/nouvelle', [controllers.Evaluations, 'create'])
       .as('nouvelle_evaluation')
+    router.post('evaluations', [controllers.Evaluations, 'store']).as('evaluations.store')
+    router.get('evaluations/:id', [controllers.Evaluations, 'show']).as('grille')
+    router.put('evaluations/:id', [controllers.Evaluations, 'update']).as('evaluations.update')
+    router.post('evaluations/:id/notes', [controllers.Evaluations, 'notes']).as('evaluations.notes')
     router
-      .get('evaluations/:id', ({ inertia, params }) =>
-        inertia.render('enseignant/grille', { id: String(params.id) })
-      )
-      .as('grille')
-    router.on('appreciations').renderInertia('enseignant/appreciations', {}).as('appreciations')
-    router.on('recapitulatif').renderInertia('enseignant/recapitulatif', {}).as('recapitulatif')
+      .post('evaluations/:id/soumettre', [controllers.Evaluations, 'soumettre'])
+      .as('evaluations.soumettre')
+    router.get('appreciations', [controllers.Appreciations, 'index']).as('appreciations')
+    router.post('appreciations', [controllers.Appreciations, 'store']).as('appreciations.store')
+    router.get('recapitulatif', [controllers.Appreciations, 'recapitulatif']).as('recapitulatif')
   })
   .prefix('enseignant')
   .as('enseignant')
@@ -106,7 +108,20 @@ router
 router
   .group(() => {
     router.on('/').renderInertia('direction/accueil', {}).as('accueil')
-    router.on('validation').renderInertia('direction/validation', {}).as('validation')
+    router.get('validation', [controllers.ValidationEvaluations, 'index']).as('validation')
+    router
+      .post('evaluations/:id/valider', [controllers.ValidationEvaluations, 'valider'])
+      .as('evaluations.valider')
+    router
+      .post('evaluations/:id/renvoyer', [controllers.ValidationEvaluations, 'renvoyer'])
+      .as('evaluations.renvoyer')
+    router
+      .post('evaluations/:id/deverrouiller', [controllers.ValidationEvaluations, 'deverrouiller'])
+      .as('evaluations.deverrouiller')
+    router.get('suivi', [controllers.ValidationEvaluations, 'suivi']).as('suivi')
+    router
+      .post('derogations', [controllers.ValidationEvaluations, 'derogation'])
+      .as('derogations.store')
     router.on('deliberation').renderInertia('direction/deliberation', {}).as('deliberation')
     router.on('bulletins').renderInertia('direction/bulletins', {}).as('bulletins')
     router.get('inscriptions', [controllers.ValidationInscriptions, 'index']).as('inscriptions')

@@ -6,6 +6,7 @@ import ChoixService from '#services/choix_service'
 import StructureService from '#services/structure_service'
 import PiecesService from '#services/pieces_service'
 import StockageService from '#services/stockage_service'
+import MoyenneService from '#services/moyenne_service'
 import InscriptionService from '#services/inscription_service'
 import AnneeScolaireService from '#services/annee_scolaire_service'
 import { COLONNES_ELEVES } from '#services/colonnes_eleves'
@@ -104,10 +105,17 @@ export default class ElevesController {
     const journal = await EleveService.journal(eleve.id)
     const peutValider = await ctx.bouncer.with(InscriptionPolicy).allows('valider')
     const peutReactiver = await ctx.bouncer.with(ElevePolicy).allows('reactiver', eleve)
+    const courante = eleve.inscriptions.find(
+      (i) => i.etat === 'valide' && i.annee.etat === 'active' && i.classeId
+    )
+    const resultats = courante
+      ? await MoyenneService.resultatsEleve(eleve.id, courante.classeId!, courante.anneeId)
+      : []
 
     return ctx.inertia.render('scolarite/fiche', {
       onglet: String(ctx.request.input('onglet', 'identite')),
       droits: { valider: peutValider, reactiver: peutReactiver },
+      resultats,
       eleve: {
         id: eleve.id,
         matricule: eleve.matricule,

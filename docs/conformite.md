@@ -18,11 +18,18 @@ lotissement) · **À trancher** (décision de l’établissement attendue).
 | RG6 | Validation seulement avec pièces obligatoires et classe affectée | Fait | `scolarite.spec.ts` · RG6 |
 | RG7 | Capacité de classe ; seule la direction force, avec motif | Fait | `scolarite.spec.ts` · RG7 |
 | RG8 | Élève transféré, en abandon ou exclu : réactivation par la direction | Fait | `scolarite.spec.ts` · RG8 |
-| RG9 à RG15 | Notes, évaluations, moyennes, arrondi | Lot L3 | — |
-| RG16 à RG19 | Rang, génération, publication, rectificatif | Lot L4 | — |
+| RG9 | L’enseignant ne saisit que sur ses affectations de l’année active | Fait | `notes.spec.ts` · grille et création refusées sur l’affectation d’un collègue, même par l’URL ; élève d’une autre classe refusé |
+| RG10 | Note entre 0 et la note maximale | Fait | `notes.spec.ts` · refus en application et en base (déclencheur) |
+| RG11 | Absent hors numérateur et dénominateur ; un 0 compte | Fait | `notes.spec.ts` · RG11 |
+| RG12 | Évaluation validée non modifiable ; déverrouillage par la direction, avec motif, journalisé | Fait | `notes.spec.ts` · soumission, validation, déverrouillage |
+| RG13 | Saisie refusée hors fenêtre, sauf dérogation | Fait | `notes.spec.ts` · fenêtre et dérogation |
+| RG14 | Aucune moyenne stockée ; cache daté seulement | Fait | `notes.spec.ts` · le cache suit les notes |
+| RG15 | Arrondi à l’affichage uniquement | Fait | `notes.spec.ts` · RG3 et RG15 |
+| RG16 | Rang sur la valeur non arrondie, ex æquo, rang suivant sauté | Fait | `notes.spec.ts` · RG16 |
+| RG17 à RG19 | Génération, publication, rectificatif | Lot L4 | — |
 | RG20 | Tuteur : ses élèves seulement, en lecture | Partiel | Accès au portail créé depuis la fiche ; écrans du portail sur données réelles en L4. Le tuteur n’ouvre aucun écran ni pièce de scolarité (`scolarite.spec.ts`, `acces_par_role.spec.ts`) |
 | RG21 | Suppression logique partout | Fait | `deleted_at` sur toutes les tables, clés étrangères en restriction ; tuteur détaché, pièce remplacée et rôle retiré conservés |
-| RG22 | Journalisation avec auteur, date, IP, avant / après | Fait pour L0 à L2 | `journal.spec.ts`, `comptes.spec.ts`, `scolarite.spec.ts` (validation). Notes, publication et déverrouillage : L3 et L4 |
+| RG22 | Journalisation avec auteur, date, IP, avant / après | Fait pour L0 à L3 | `journal.spec.ts`, `comptes.spec.ts`, `scolarite.spec.ts` (validation), `notes.spec.ts` (saisie, modification, déverrouillage). Publication : L4 |
 
 ## Modules
 
@@ -48,7 +55,7 @@ autorisée par la policy de sa ressource. Droits testés par profil, accès refu
 | Exigence | État |
 | --- | --- |
 | Matricule à vie, appartenance à la classe portée par l’inscription | Fait |
-| Fiche en 7 onglets | Fait pour identité, tuteurs, scolarité, documents, journal ; notes en L3, bulletins en L4 (états vides) |
+| Fiche en 7 onglets | Fait pour identité, tuteurs, scolarité, notes, documents, journal ; bulletins en L4 (état vide) |
 | Statuts ; transfert et abandon avec motif et date d’effet | Fait |
 | Recherche plein texte (nom, prénom, matricule) et filtres cumulables | Fait (index trigramme, sans accent) |
 | Export Excel et PDF des colonnes visibles | Fait (choix des colonnes mémorisé par navigateur) |
@@ -59,7 +66,10 @@ autorisée par la policy de sa ressource. Droits testés par profil, accès refu
 Années, périodes et fenêtres de saisie, niveaux, matières, coefficients par niveau, matières
 obligatoires, classes, affectations, duplication d’année, paramètres de l’établissement.
 
-### § 6 et § 7 · Notes, résultats et bulletins — Lots L3 et L4
+### § 6 · Notes et résultats — Lot L3
+Fait : évaluations, grille de saisie (clavier, enregistrement automatique, file locale hors ligne), soumission, validation, déverrouillage, dérogations, suivi des saisies, appréciations, récapitulatif, onglet Notes de la fiche élève.
+
+### § 7 · Bulletins — Lot L4
 Les écrans correspondants affichent encore le jeu de démonstration du prototype.
 
 ## Architecture (§ 9)
@@ -68,7 +78,7 @@ Les écrans correspondants affichent encore le jeu de démonstration du prototyp
 | --- | --- |
 | Contrôleurs sans calcul : validation, autorisation, service, réponse | Fait |
 | Une transaction par opération métier | Fait (validation, dossier, import, changement de classe) |
-| Service de calcul des moyennes unique | Lot L3 |
+| Service de calcul des moyennes unique | Fait (`MoyenneService`, utilisé par les écrans enseignant, direction et la fiche élève) |
 | PDF depuis un gabarit Edge rendu en HTML | Fait (`resources/views/pdf`) |
 | Traitements lourds en file d’attente | Fait (exports, certificats, registre) ; travailleur `node ace queue:work` |
 | Année active injectée par un middleware | Fait |

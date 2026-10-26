@@ -1,25 +1,33 @@
 import Coque from '~/layouts/coque'
 import Icone from '~/components/ui/icone'
+import EtatVide from '~/components/ui/etat_vide'
 import PastilleEval from '~/components/ui/pastille_eval'
 import { cx, fmt } from '~/lib/format'
-import { modifier, useDemo } from '~/demo/store'
-import { statsEval } from '~/demo/calculs'
-import { ICONE_TYPE } from '~/demo/donnees'
+import { ICONE_TYPE, sur20, type EvaluationListe } from '~/lib/notes'
 import { Link } from '@adonisjs/inertia/react'
 
-const FILTRES = ['Toutes', '3e A', '3e B', '4e A']
-
-export default function MesEvaluations() {
-  const st = useDemo()
-  const liste = st.evals.filter(
-    (e) => e.mine && (st.filtreClasse === 'Toutes' || e.classe === st.filtreClasse)
-  )
+export default function MesEvaluations({
+  annee,
+  affectations,
+  filtre,
+  evaluations,
+}: {
+  annee: { id: number; libelle: string } | null
+  affectations: Array<{ id: number; libelle: string }>
+  filtre: number | null
+  evaluations: EvaluationListe[]
+}) {
+  const filtres = [{ id: null as number | null, libelle: 'Toutes' }, ...affectations]
 
   return (
     <Coque
       espace="enseignant"
       titre="Mes évaluations"
-      action={{ href: '/enseignant/evaluations/nouvelle', libelle: 'Nouvelle évaluation' }}
+      action={
+        affectations.length
+          ? { href: '/enseignant/evaluations/nouvelle', libelle: 'Nouvelle évaluation' }
+          : undefined
+      }
     >
       <div className="flex flex-col gap-3.5">
         <div className="flex flex-wrap items-center gap-2.5">
@@ -28,38 +36,55 @@ export default function MesEvaluations() {
             aria-label="Classe"
             className="scroll-masque flex min-w-0 flex-1 gap-2 overflow-x-auto"
           >
-            {FILTRES.map((c) => {
-              const on = st.filtreClasse === c
+            {filtres.map((f) => {
+              const on = filtre === f.id
               return (
-                <button
-                  key={c}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => modifier(() => ({ filtreClasse: c }))}
+                <Link
+                  key={f.id ?? 'toutes'}
+                  route="enseignant.evaluations"
+                  qs={f.id ? { affectation: f.id } : {}}
+                  aria-current={on ? 'true' : undefined}
                   className={cx(
-                    'h-9 shrink-0 rounded-champ border px-3.5 text-meta font-semibold',
+                    'flex h-9 shrink-0 items-center rounded-champ border px-3.5 text-meta font-semibold hover:no-underline',
                     on
                       ? 'border-accent bg-accent text-white'
                       : 'border-bordure-champ bg-white text-encre-2'
                   )}
                 >
-                  {c}
-                </button>
+                  {f.libelle}
+                </Link>
               )
             })}
           </div>
-          <Link
-            route="enseignant.nouvelle_evaluation"
-            className="hidden h-[42px] items-center gap-2 rounded-champ border border-accent bg-white px-4 text-corps font-bold text-accent hover:no-underline lg:flex"
-          >
-            <Icone nom="plus" />
-            Nouvelle évaluation
-          </Link>
+          {affectations.length > 0 && (
+            <Link
+              route="enseignant.nouvelle_evaluation"
+              qs={filtre ? { affectation: filtre } : {}}
+              className="hidden h-[42px] items-center gap-2 rounded-champ border border-accent bg-white px-4 text-corps font-bold text-accent hover:no-underline lg:flex"
+            >
+              <Icone nom="plus" />
+              Nouvelle évaluation
+            </Link>
+          )}
         </div>
 
-        {liste.map((e) => {
-          const s = statsEval(st, e)
-          const fait = s.notes + s.abs
+        {evaluations.length === 0 && (
+          <EtatVide
+            icone="clipboard-list"
+            titre="Aucune évaluation"
+            texte={
+              annee
+                ? affectations.length
+                  ? 'Créez une évaluation pour commencer la saisie des notes.'
+                  : 'Vous n’avez pas encore de classe confiée cette année.'
+                : 'Aucune année scolaire active.'
+            }
+          />
+        )}
+
+        {evaluations.map((e) => {
+          const s = e.statistiques
+          const fait = s.notes + s.absents
           return (
             <Link
               key={e.id}
@@ -74,23 +99,30 @@ export default function MesEvaluations() {
                 <div className="flex min-w-0 flex-1 flex-col gap-[3px]">
                   <span className="text-moyen font-bold text-encre">{e.titre}</span>
                   <span className="text-leg text-encre-3">
-                    {e.classe} · {e.date} · sur {e.max} · poids {e.poids}
+                    {e.classe} · {e.matiere} · {e.date} · sur {e.noteMax} · poids {e.poids} ·{' '}
+                    {e.periode}
                   </span>
                 </div>
                 <PastilleEval etat={e.etat} />
               </div>
+              {e.etat === 'brouillon' && e.motifRetour && (
+                <span className="text-leg text-attention">
+                  <Icone nom="triangle-exclamation" className="mr-1.5" />
+                  Renvoyée par la direction : {e.motifRetour}
+                </span>
+              )}
               <div className="flex w-full items-center gap-3">
                 <div className="h-1.5 flex-1 rounded-[3px] bg-neutre">
                   <div
                     className="h-full rounded-[3px] bg-accent"
-                    style={{ width: `${((fait / s.total) * 100).toFixed(0)}%` }}
+                    style={{ width: `${s.effectif ? ((fait / s.effectif) * 100).toFixed(0) : 0}%` }}
                   />
                 </div>
                 <span className="text-leg font-semibold text-encre-2">
-                  {fait}/{s.total} notés
+                  {fait}/{s.effectif} notés
                 </span>
                 <span className="text-leg text-encre-3">
-                  Moy. {fmt(s.moyenne === null ? null : (s.moyenne * 20) / e.max)}
+                  Moy. {fmt(sur20(s.moyenne, e.noteMax))}/20
                 </span>
               </div>
             </Link>
