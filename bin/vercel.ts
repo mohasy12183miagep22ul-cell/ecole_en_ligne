@@ -13,6 +13,24 @@ import 'reflect-metadata'
 import { Ignitor } from '@adonisjs/core/ignitor'
 import type { IncomingMessage, ServerResponse } from 'node:http'
 
+/**
+ * L'intégration Neon de Vercel fournit PGHOST, PGUSER… (adresse mutualisée) :
+ * on les reprend sous les noms attendus par `start/env.ts`, sauf valeur explicite.
+ */
+const NEON = {
+  DB_HOST: 'PGHOST',
+  DB_USER: 'PGUSER',
+  DB_PASSWORD: 'PGPASSWORD',
+  DB_DATABASE: 'PGDATABASE',
+}
+for (const [cible, source] of Object.entries(NEON)) {
+  process.env[cible] ??= process.env[source]
+}
+if (process.env.PGHOST) {
+  process.env.DB_PORT ??= '5432'
+  process.env.DB_SSL ??= 'true'
+}
+
 const APP_ROOT = new URL('../', import.meta.url)
 
 const IMPORTER = (filePath: string) => {

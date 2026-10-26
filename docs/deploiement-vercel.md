@@ -39,22 +39,18 @@ tests ni `migration:fresh`.
 
 1. vercel.com → *Add New → Project* → importer le dépôt GitHub `ecole_en_ligne`.
 2. *Framework Preset* : **Other**. Les commandes viennent de `vercel.json`, ne rien changer.
-3. *Settings → General → Node.js Version* : **24.x**.
+3. *Settings → General → Node.js Version* : **24.x**. La région des fonctions est fixée à Francfort (`fra1`) dans `vercel.json`, au plus près de la base.
 4. *Environment Variables* (Production) :
 
 | Variable | Valeur |
 | --- | --- |
 | `NODE_ENV` | `production` |
-| `TZ` | `UTC` |
 | `HOST` / `PORT` | `0.0.0.0` / `3333` (exigées, non utilisées) |
 | `LOG_LEVEL` | `info` |
 | `APP_KEY` | résultat de `node ace generate:key --show` — secret, ne jamais le committer |
 | `APP_URL` | `https://<projet>.vercel.app` |
 | `SESSION_DRIVER` | `cookie` |
-| `DB_HOST` | adresse **mutualisée** Neon (`…-pooler…`) |
-| `DB_PORT` | `5432` |
-| `DB_USER` / `DB_PASSWORD` / `DB_DATABASE` | identifiants Neon |
-| `DB_SSL` | `true` |
+| `DB_*` | rien à saisir si la base est créée par l'intégration Neon de Vercel : `bin/vercel.ts` reprend `PGHOST`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` (adresse mutualisée) et active `DB_SSL` |
 | `PROXY_DE_CONFIANCE` | `true` (adresse IP réelle au journal) |
 | `MAIL_MAILER` | `journal` (ou `smtp` + `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USERNAME`, `SMTP_PASSWORD`) |
 | `MAIL_FROM_NAME` / `MAIL_FROM_ADDRESS` | nom et adresse d'expédition |

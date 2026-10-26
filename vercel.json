@@ -4,6 +4,7 @@
   "installCommand": "npm ci",
   "buildCommand": "node ace build && cd build && npm ci --omit=dev",
   "outputDirectory": "build/public",
+  "regions": ["fra1"],
   "functions": {
     "api/index.js": {
       "includeFiles": "build/**",
