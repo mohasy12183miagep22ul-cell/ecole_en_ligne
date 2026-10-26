@@ -21,6 +21,14 @@ export default defineConfig({
     },
   },
 
+  /**
+   * Manifeste hors du dossier caché `.vite` : l'hébergement Vercel ne copie
+   * pas les dossiers cachés dans la fonction.
+   */
+  build: {
+    manifest: 'manifest.json',
+  },
+
   server: {
     watch: {
       ignored: ['**/storage/**', '**/tmp/**'],

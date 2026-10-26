@@ -7,7 +7,7 @@
   "regions": ["fra1"],
   "functions": {
     "api/index.js": {
-      "includeFiles": "build/{**,.adonisjs/**,public/assets/.vite/**}",
+      "includeFiles": "build/**",
       "excludeFiles": "build/**/*.{map,md,d.ts}",
       "maxDuration": 60
     }
