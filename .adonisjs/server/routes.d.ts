@@ -99,6 +99,38 @@ export type ScannedRoutes = {
     'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes.activation': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.journal': { paramsTuple?: []; params?: {} }
+    'api.auth.connexion': { paramsTuple?: []; params?: {} }
+    'api.auth.verification': { paramsTuple?: []; params?: {} }
+    'api.auth.verification.renvoyer': { paramsTuple?: []; params?: {} }
+    'api.auth.mot_de_passe_oublie': { paramsTuple?: []; params?: {} }
+    'api.auth.deconnexion': { paramsTuple?: []; params?: {} }
+    'api.moi': { paramsTuple?: []; params?: {} }
+    'api.moi.mot_de_passe': { paramsTuple?: []; params?: {} }
+    'api.enseignant.affectations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.periodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.types': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.store': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.evaluations.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.evaluations.notes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.evaluations.soumettre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.appreciations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.appreciations.store': { paramsTuple?: []; params?: {} }
+    'api.enseignant.recapitulatif': { paramsTuple?: []; params?: {} }
+    'api.direction.evaluations': { paramsTuple?: []; params?: {} }
+    'api.direction.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.evaluations.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.evaluations.renvoyer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.evaluations.deverrouiller': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.suivi': { paramsTuple?: []; params?: {} }
+    'api.direction.derogations.store': { paramsTuple?: []; params?: {} }
+    'api.direction.inscriptions': { paramsTuple?: []; params?: {} }
+    'api.direction.inscriptions.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.inscriptions.refuser': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.portail.enfants': { paramsTuple?: []; params?: {} }
+    'api.portail.enfant': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
@@ -143,6 +175,21 @@ export type ScannedRoutes = {
     'admin.affectations': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.journal': { paramsTuple?: []; params?: {} }
+    'api.moi': { paramsTuple?: []; params?: {} }
+    'api.enseignant.affectations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.periodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.types': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.appreciations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.recapitulatif': { paramsTuple?: []; params?: {} }
+    'api.direction.evaluations': { paramsTuple?: []; params?: {} }
+    'api.direction.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.suivi': { paramsTuple?: []; params?: {} }
+    'api.direction.inscriptions': { paramsTuple?: []; params?: {} }
+    'api.portail.enfants': { paramsTuple?: []; params?: {} }
+    'api.portail.enfant': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
@@ -187,6 +234,21 @@ export type ScannedRoutes = {
     'admin.affectations': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.journal': { paramsTuple?: []; params?: {} }
+    'api.moi': { paramsTuple?: []; params?: {} }
+    'api.enseignant.affectations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.periodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.types': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.appreciations': { paramsTuple?: []; params?: {} }
+    'api.enseignant.recapitulatif': { paramsTuple?: []; params?: {} }
+    'api.direction.evaluations': { paramsTuple?: []; params?: {} }
+    'api.direction.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.suivi': { paramsTuple?: []; params?: {} }
+    'api.direction.inscriptions': { paramsTuple?: []; params?: {} }
+    'api.portail.enfants': { paramsTuple?: []; params?: {} }
+    'api.portail.enfant': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
   }
   POST: {
     'session.store': { paramsTuple?: []; params?: {} }
@@ -229,6 +291,21 @@ export type ScannedRoutes = {
     'admin.classes.store': { paramsTuple: [ParamValue]; params: {'anneeId': ParamValue} }
     'admin.affectations.store': { paramsTuple: [ParamValue]; params: {'anneeId': ParamValue} }
     'admin.comptes.store': { paramsTuple?: []; params?: {} }
+    'api.auth.connexion': { paramsTuple?: []; params?: {} }
+    'api.auth.verification': { paramsTuple?: []; params?: {} }
+    'api.auth.verification.renvoyer': { paramsTuple?: []; params?: {} }
+    'api.auth.mot_de_passe_oublie': { paramsTuple?: []; params?: {} }
+    'api.auth.deconnexion': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.store': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.notes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.evaluations.soumettre': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.evaluations.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.evaluations.renvoyer': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.evaluations.deverrouiller': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.derogations.store': { paramsTuple?: []; params?: {} }
+    'api.direction.inscriptions.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.direction.inscriptions.refuser': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
   }
   PUT: {
     'enseignant.evaluations.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -242,10 +319,21 @@ export type ScannedRoutes = {
     'admin.classes.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes.activation': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.moi.mot_de_passe': { paramsTuple?: []; params?: {} }
+    'api.enseignant.evaluations.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.enseignant.appreciations.store': { paramsTuple?: []; params?: {} }
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
   }
   DELETE: {
     'scolarite.tuteurs.detacher': { paramsTuple: [ParamValue,ParamValue]; params: {'id': ParamValue,'tuteurId': ParamValue} }
     'admin.affectations.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
+  }
+  OPTIONS: {
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
+  }
+  PATCH: {
+    'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
   }
 }
 declare module '@adonisjs/core/types/http' {

@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon'
 import db from '@adonisjs/lucid/services/db'
 import Periode from '#models/periode'
 import Affectation from '#models/affectation'
@@ -93,38 +92,7 @@ export default class ValidationEvaluationsController {
     const classes = await ChoixService.classes(annee.id)
     const classeId = Number(ctx.request.input('classe')) || null
 
-    const affectations = await db
-      .from('affectations as a')
-      .join('classes as c', 'c.id', 'a.classe_id')
-      .join('matieres as m', 'm.id', 'a.matiere_id')
-      .join('users as u', 'u.id', 'a.enseignant_id')
-      .leftJoin('evaluations as ev', (j) =>
-        j
-          .on('ev.affectation_id', 'a.id')
-          .andOnVal('ev.periode_id', periode?.id ?? 0)
-          .andOnNull('ev.deleted_at')
-      )
-      .where('a.annee_id', annee.id)
-      .whereNull('a.deleted_at')
-      .if(classeId, (q) => q.where('a.classe_id', classeId!))
-      .groupBy('a.id', 'c.libelle', 'm.libelle', 'u.full_name')
-      .select('a.id', 'c.libelle as classe', 'm.libelle as matiere', 'u.full_name as enseignant')
-      .select(
-        db.raw(`COUNT(ev.id) FILTER (WHERE ev.etat = 'brouillon') AS brouillons`),
-        db.raw(`COUNT(ev.id) FILTER (WHERE ev.etat = 'soumise') AS soumises`),
-        db.raw(`COUNT(ev.id) FILTER (WHERE ev.etat IN ('validee', 'verrouillee')) AS validees`)
-      )
-      .orderBy('c.libelle')
-      .orderBy('m.libelle')
-
-    const derogations = periode
-      ? await db
-          .from('derogations_saisie')
-          .where('periode_id', periode.id)
-          .whereNull('deleted_at')
-          .where('jusqu_au', '>=', DateTime.now().toISODate()!)
-          .select('affectation_id', 'jusqu_au')
-      : []
+    const lignes = await EvaluationService.suiviSaisies(annee.id, periode, classeId)
 
     return ctx.inertia.render('direction/suivi', {
       choix: {
@@ -140,22 +108,10 @@ export default class ValidationEvaluationsController {
         classes: classes.map((c) => ({ id: c.id, libelle: c.libelle })),
         classe: classeId,
       },
-      lignes: affectations.map((a) => {
-        const d = derogations
-          .filter((x) => x.affectation_id === a.id)
-          .map((x) => DateTime.fromJSDate(x.jusqu_au))
-          .sort((x, y) => y.toMillis() - x.toMillis())[0]
-        return {
-          id: a.id as number,
-          classe: a.classe as string,
-          matiere: a.matiere as string,
-          enseignant: a.enseignant as string,
-          brouillons: Number(a.brouillons),
-          soumises: Number(a.soumises),
-          validees: Number(a.validees),
-          derogation: d ? d.toFormat('dd/MM/yyyy') : null,
-        }
-      }),
+      lignes: lignes.map((l) => ({
+        ...l,
+        derogation: l.derogation ? l.derogation.toFormat('dd/MM/yyyy') : null,
+      })),
     })
   }
 

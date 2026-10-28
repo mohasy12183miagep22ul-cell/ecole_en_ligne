@@ -4,6 +4,7 @@ import { compose } from '@adonisjs/core/helpers'
 import { hasMany } from '@adonisjs/lucid/orm'
 import type { HasMany } from '@adonisjs/lucid/types/relations'
 import { withAuthFinder } from '@adonisjs/auth/mixins/lucid'
+import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import RoleUtilisateur, { type Role } from '#models/role_utilisateur'
 
 /**
@@ -21,6 +22,12 @@ const ACCUEILS: Array<[Role, string]> = [
 ]
 
 export default class User extends compose(UserSchema, withAuthFinder(hash)) {
+  /** Jetons de l'application mobile (garde `api`), valables 30 jours. */
+  static accessTokens = DbAccessTokensProvider.forModel(User, {
+    prefix: 'eel_',
+    expiresIn: '30 days',
+  })
+
   @hasMany(() => RoleUtilisateur, {
     onQuery: (q) => q.whereNull('deleted_at'),
   })
@@ -45,5 +52,17 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
 
   get accueil() {
     return ACCUEILS.find(([r]) => this.roles.includes(r))?.[1] ?? '/login'
+  }
+
+  /**
+   * Espaces ouverts dans l'application mobile, par ordre de priorité. Le
+   * paramétrage (administrateur) et la scolarité restent sur le web.
+   */
+  get espacesMobiles() {
+    const espaces: Array<'direction' | 'enseignant' | 'portail'> = []
+    if (this.aLeRole('direction')) espaces.push('direction')
+    if (this.aLeRole('enseignant', 'professeur_principal')) espaces.push('enseignant')
+    if (this.aLeRole('tuteur')) espaces.push('portail')
+    return espaces
   }
 }

@@ -2,11 +2,12 @@ import type User from '#models/user'
 import type Eleve from '#models/eleve'
 import type { StatutEleve } from '#models/eleve'
 import { BasePolicy } from '@adonisjs/bouncer'
+import PortailService from '#services/portail_service'
 
 /**
  * Droits sur la fiche élève (§ 2). Secrétariat et direction gèrent les
  * dossiers ; l'exclusion, le diplôme et la réactivation (RG8) relèvent de la
- * direction. Le portail famille (RG20) viendra avec le lot 4.
+ * direction. Le portail famille ne lit que les élèves rattachés (RG20).
  */
 export default class ElevePolicy extends BasePolicy {
   async #roles(user: User) {
@@ -33,5 +34,12 @@ export default class ElevePolicy extends BasePolicy {
   async reactiver(user: User, _eleve?: Eleve) {
     const u = await this.#roles(user)
     return u.aLeRole('direction')
+  }
+
+  /** RG20 : un tuteur ne consulte que les élèves qui lui sont rattachés. */
+  async consulterFamille(user: User, eleve: Eleve) {
+    const u = await this.#roles(user)
+    if (!u.aLeRole('tuteur')) return false
+    return PortailService.estRattache(user, eleve.id)
   }
 }

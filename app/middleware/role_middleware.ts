@@ -10,7 +10,7 @@ import type { NextFn } from '@adonisjs/core/types/http'
  */
 export default class RoleMiddleware {
   async handle(ctx: HttpContext, next: NextFn, roles: Role[]) {
-    const user = ctx.auth.getUserOrFail()
+    const user = ctx.auth.use('web').getUserOrFail()
     await user.load('rolesUtilisateur')
     if (!user.aLeRole(...roles)) {
       return ctx.response.redirect(user.accueil)

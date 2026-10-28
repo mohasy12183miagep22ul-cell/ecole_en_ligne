@@ -103,6 +103,42 @@ export class AppreciationSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class AuthAccessTokenSchema extends BaseModel {
+  static $columns = [
+    'abilities',
+    'createdAt',
+    'expiresAt',
+    'hash',
+    'id',
+    'lastUsedAt',
+    'name',
+    'tokenableId',
+    'type',
+    'updatedAt',
+  ] as const
+  $columns = AuthAccessTokenSchema.$columns
+  @column()
+  declare abilities: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare expiresAt: DateTime | null
+  @column()
+  declare hash: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column.dateTime()
+  declare lastUsedAt: DateTime | null
+  @column()
+  declare name: string | null
+  @column()
+  declare tokenableId: number
+  @column()
+  declare type: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class CacheMoyenneSchema extends BaseModel {
   static $columns = [
     'calculeLe',
@@ -179,6 +215,39 @@ export class CompteursMatriculeSchema extends BaseModel {
   declare annee: number
   @column()
   declare dernier: number
+}
+
+export class DefisConnexionSchema extends BaseModel {
+  static $columns = [
+    'createdAt',
+    'deletedAt',
+    'empreinte',
+    'essais',
+    'expireLe',
+    'id',
+    'updatedAt',
+    'userId',
+    'utiliseLe',
+  ] as const
+  $columns = DefisConnexionSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column.dateTime()
+  declare deletedAt: DateTime | null
+  @column()
+  declare empreinte: string
+  @column()
+  declare essais: number
+  @column.dateTime()
+  declare expireLe: DateTime
+  @column({ isPrimary: true })
+  declare id: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: number
+  @column.dateTime()
+  declare utiliseLe: DateTime | null
 }
 
 export class DerogationsSaisieSchema extends BaseModel {

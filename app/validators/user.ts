@@ -25,6 +25,31 @@ export const codeValidator = vine.create({
 })
 
 /**
+ * Connexion depuis l'application mobile : `appareil` nomme le jeton émis
+ * (ex. « iPhone de Mariama »), pour le reconnaître dans la liste des accès.
+ */
+export const connexionMobileValidator = vine.create({
+  email: email(),
+  password: vine.string(),
+  appareil: vine.string().trim().maxLength(120).optional(),
+})
+
+const defi = () => vine.string().trim().uuid()
+
+/** Second facteur depuis l'application mobile : défi reçu à la connexion + code. */
+export const defiValidator = vine.create({
+  defi: defi(),
+  code: vine
+    .string()
+    .trim()
+    .regex(/^\d{6}$/),
+  appareil: vine.string().trim().maxLength(120).optional(),
+})
+
+/** Nouveau code pour un défi encore ouvert. */
+export const renvoyerDefiValidator = vine.create({ defi: defi() })
+
+/**
  * Demande de lien de réinitialisation du mot de passe.
  */
 export const motDePasseOublieValidator = vine.create({

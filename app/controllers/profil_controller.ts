@@ -4,13 +4,13 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 export default class ProfilController {
   async show({ inertia, auth }: HttpContext) {
-    const user = auth.getUserOrFail()
+    const user = auth.use('web').getUserOrFail()
     return inertia.render('profil', { changementImpose: user.doitChangerMotDePasse })
   }
 
   async changerMotDePasse({ request, auth, response, session }: HttpContext) {
     const { actuel, nouveau } = await request.validateUsing(changerMotDePasseValidator)
-    const user = auth.getUserOrFail()
+    const user = auth.use('web').getUserOrFail()
     const resultat = await AuthentificationService.changerMotDePasse(
       user,
       actuel,

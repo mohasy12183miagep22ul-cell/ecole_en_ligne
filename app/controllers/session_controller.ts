@@ -1,21 +1,10 @@
 import User from '#models/user'
-import app from '@adonisjs/core/services/app'
-import env from '#start/env'
 import AuthentificationService from '#services/authentification_service'
 import CodeVerificationService from '#services/code_verification_service'
-import MessagerieService from '#services/messagerie_service'
 import { codeValidator, loginValidator } from '#validators/user'
 import type { HttpContext } from '@adonisjs/core/http'
 
-/**
- * Le code n'est affiché à l'écran que si aucun courriel n'est réellement
- * envoyé : en développement, ou en production tant que l'envoi n'est pas
- * branché ET que AFFICHER_CODE_VERIFICATION=true (mesure provisoire, qui
- * réduit le second facteur au seul mot de passe).
- */
-const afficherCode = () =>
-  !MessagerieService.envoiReel &&
-  (!app.inProduction || env.get('AFFICHER_CODE_VERIFICATION') === true)
+const afficherCode = () => CodeVerificationService.codeAffichable
 
 const MESSAGE_IDENTIFIANTS = 'Adresse e-mail ou mot de passe incorrect.'
 

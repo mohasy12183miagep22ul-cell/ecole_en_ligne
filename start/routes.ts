@@ -27,7 +27,7 @@ const espace = (roles: Role[]) => [
 router
   .get('/', async ({ auth, response }) => {
     if (!(await auth.check())) return response.redirect().toRoute('session.create')
-    const user = auth.getUserOrFail()
+    const user = auth.use('web').getUserOrFail()
     await user.load('rolesUtilisateur')
     return response.redirect(user.accueil)
   })

@@ -148,4 +148,54 @@ export interface ApiDefinition {
     }
     journal: typeof routes['admin.journal']
   }
+  api: {
+    auth: {
+      connexion: typeof routes['api.auth.connexion']
+      verification: typeof routes['api.auth.verification'] & {
+        renvoyer: typeof routes['api.auth.verification.renvoyer']
+      }
+      motDePasseOublie: typeof routes['api.auth.mot_de_passe_oublie']
+      deconnexion: typeof routes['api.auth.deconnexion']
+    }
+    moi: typeof routes['api.moi'] & {
+      motDePasse: typeof routes['api.moi.mot_de_passe']
+    }
+    enseignant: {
+      affectations: typeof routes['api.enseignant.affectations']
+      periodes: typeof routes['api.enseignant.periodes']
+      types: typeof routes['api.enseignant.types']
+      evaluations: typeof routes['api.enseignant.evaluations'] & {
+        store: typeof routes['api.enseignant.evaluations.store']
+        show: typeof routes['api.enseignant.evaluations.show']
+        update: typeof routes['api.enseignant.evaluations.update']
+        notes: typeof routes['api.enseignant.evaluations.notes']
+        soumettre: typeof routes['api.enseignant.evaluations.soumettre']
+      }
+      appreciations: typeof routes['api.enseignant.appreciations'] & {
+        store: typeof routes['api.enseignant.appreciations.store']
+      }
+      recapitulatif: typeof routes['api.enseignant.recapitulatif']
+    }
+    direction: {
+      evaluations: typeof routes['api.direction.evaluations'] & {
+        show: typeof routes['api.direction.evaluations.show']
+        valider: typeof routes['api.direction.evaluations.valider']
+        renvoyer: typeof routes['api.direction.evaluations.renvoyer']
+        deverrouiller: typeof routes['api.direction.evaluations.deverrouiller']
+      }
+      suivi: typeof routes['api.direction.suivi']
+      derogations: {
+        store: typeof routes['api.direction.derogations.store']
+      }
+      inscriptions: typeof routes['api.direction.inscriptions'] & {
+        valider: typeof routes['api.direction.inscriptions.valider']
+        refuser: typeof routes['api.direction.inscriptions.refuser']
+      }
+    }
+    portail: {
+      enfants: typeof routes['api.portail.enfants']
+      enfant: typeof routes['api.portail.enfant']
+    }
+    introuvable: typeof routes['api.introuvable']
+  }
 }

@@ -53,4 +53,6 @@ export const middleware = router.named({
   auth: () => import('#middleware/auth_middleware'),
   role: () => import('#middleware/role_middleware'),
   motDePasseImpose: () => import('#middleware/mot_de_passe_impose_middleware'),
+  forceJson: () => import('#middleware/force_json_middleware'),
+  api: () => import('#middleware/api_middleware'),
 })

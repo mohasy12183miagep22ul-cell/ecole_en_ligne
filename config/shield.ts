@@ -35,8 +35,12 @@ const shieldConfig = defineConfig({
     /**
      * Route patterns to exclude from CSRF checks.
      * Useful for external webhooks or API endpoints.
+     *
+     * L'API mobile (/api/…) n'accepte que le garde `api` : un jeton porté par
+     * l'en-tête Authorization, jamais un cookie de session. Une requête
+     * forgée par un site tiers n'y transporte donc aucune authentification.
      */
-    exceptRoutes: [],
+    exceptRoutes: (ctx) => ctx.request.url().startsWith('/api/'),
 
     /**
      * Expose an encrypted XSRF-TOKEN cookie for frontend HTTP clients.

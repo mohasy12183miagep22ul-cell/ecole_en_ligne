@@ -16,7 +16,9 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
      */
     const { auth } = ctx as Partial<HttpContext>
 
-    if (auth?.user) await auth.user.load('rolesUtilisateur')
+    // Les pages Inertia ne servent que le garde web (session).
+    const user = auth?.use('web').user
+    if (user) await user.load('rolesUtilisateur')
 
     /**
      * Données partagées avec toutes les pages. Toujours passer par un
@@ -25,7 +27,7 @@ export default class InertiaMiddleware extends BaseInertiaMiddleware {
     const parametres = await EtablissementService.parametres()
     return {
       errors: ctx.inertia.always(this.getValidationErrors(ctx)),
-      user: ctx.inertia.always(auth?.user ? UserTransformer.transform(auth.user) : undefined),
+      user: ctx.inertia.always(user ? UserTransformer.transform(user) : undefined),
       // Nom de l'établissement (en-têtes, écran de connexion).
       etablissement: ctx.inertia.always({ nom: parametres.nom }),
       // Année active, présente dans chaque page (null entre deux années).
