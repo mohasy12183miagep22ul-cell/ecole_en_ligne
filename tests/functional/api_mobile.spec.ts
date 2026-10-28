@@ -147,6 +147,16 @@ async function tuteurDe(eleve: Eleve) {
   return user
 }
 
+test.group('API mobile · santé', () => {
+  test('sante et health : réponse sans jeton, base joignable', async ({ client, assert }) => {
+    for (const chemin of ['/api/v1/sante', '/api/v1/health']) {
+      const r = await client.get(chemin)
+      r.assertStatus(200)
+      assert.containsSubset(r.body(), { statut: 'ok', base: 'ok' })
+    }
+  })
+})
+
 test.group('API mobile · authentification', (group) => {
   group.each.setup(() => testUtils.db().withGlobalTransaction())
   group.each.setup(() => {

@@ -14,6 +14,7 @@ export const controllers = {
     Enseignant: () => import('#controllers/api/enseignant_controller'),
     Moi: () => import('#controllers/api/moi_controller'),
     Portail: () => import('#controllers/api/portail_controller'),
+    Sante: () => import('#controllers/api/sante_controller'),
   },
   Appreciations: () => import('#controllers/appreciations_controller'),
   Classes: () => import('#controllers/classes_controller'),

@@ -19,9 +19,14 @@ const Enseignant = () => import('#controllers/api/enseignant_controller')
 const Appreciations = () => import('#controllers/api/appreciations_controller')
 const Direction = () => import('#controllers/api/direction_controller')
 const Portail = () => import('#controllers/api/portail_controller')
+const Sante = () => import('#controllers/api/sante_controller')
 
 router
   .group(() => {
+    // Sans jeton. `health` : alias du nom usuel des outils de supervision.
+    router.get('sante', [Sante, 'show']).as('sante')
+    router.get('health', [Sante, 'show']).as('health')
+
     router
       .group(() => {
         router.post('connexion', [Auth, 'connexion']).as('connexion')

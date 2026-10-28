@@ -9,6 +9,7 @@ complète des points d'accès, des réponses et des erreurs est dans ce projet-l
 | Élément | Fichier |
 | --- | --- |
 | Routes `/api/v1` | `start/routes_api.ts` (préchargé dans `adonisrc.ts`) |
+| Santé (`GET /api/v1/sante`, alias `health`) : API et base joignables, sans jeton | `app/controllers/api/sante_controller.ts` |
 | Contrôleurs | `app/controllers/api/` |
 | Barrière (jeton, compte actif, mot de passe imposé, rôle) | `app/middleware/api_middleware.ts` |
 | Réponses toujours en JSON | `app/middleware/force_json_middleware.ts` |
