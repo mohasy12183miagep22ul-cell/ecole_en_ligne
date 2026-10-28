@@ -13,6 +13,7 @@ import Evaluation from '#models/evaluation'
 import Inscription from '#models/inscription'
 import Affectation from '#models/affectation'
 import EntreeJournal from '#models/entree_journal'
+import FichierGenere from '#models/fichier_genere'
 import NiveauMatiere from '#models/niveau_matiere'
 import AnneeScolaire from '#models/annee_scolaire'
 import PortailService from '#services/portail_service'
@@ -577,5 +578,164 @@ test.group('API mobile · portail famille', (group) => {
     r1.assertStatus(404)
     const r2 = await appel(client, 'get', `/api/v1/portail/enfants/${ctx.eleves[0].id}`, j)
     r2.assertStatus(404)
+  })
+})
+
+test.group('API mobile · administrateur', (group) => {
+  group.each.setup(() => testUtils.db().withGlobalTransaction())
+
+  test('espace admin annoncé et fermé aux autres rôles', async ({ client, assert }) => {
+    const ctx = await contexte()
+    const admin = await creerCompte(['admin'])
+    const moi = await appel(client, 'get', '/api/v1/moi', await jeton(client, admin))
+    assert.deepEqual(moi.body().utilisateur.espaces, ['admin'])
+
+    for (const user of [ctx.direction, ctx.enseignant]) {
+      const r = await appel(client, 'get', '/api/v1/admin/accueil', await jeton(client, user))
+      assert.equal(r.status(), 403)
+      assert.equal(r.body().code, 'E_ROLE')
+    }
+  })
+
+  test('tableau de bord, années, structure et établissement', async ({ client, assert }) => {
+    const ctx = await contexte()
+    const j = await jeton(client, await creerCompte(['admin']))
+
+    const accueil = await appel(client, 'get', '/api/v1/admin/accueil', j)
+    accueil.assertStatus(200)
+    assert.containsSubset(accueil.body().statistiques, { niveaux: 1, classes: 1, matieres: 1 })
+    assert.equal(accueil.body().periodes[0].debutSaisie, ctx.periode.debutSaisie.toISODate())
+
+    const annees = await appel(client, 'get', '/api/v1/admin/annees', j)
+    annees.assertStatus(200)
+    assert.containsSubset(annees.body().annees, [{ id: ctx.annee.id, etat: 'active', classes: 1 }])
+
+    const structure = await appel(client, 'get', '/api/v1/admin/structure', j)
+    structure.assertStatus(200)
+    assert.containsSubset(structure.body().coefficients, [{ coefficient: 4, obligatoire: true }])
+
+    const etab = await appel(client, 'get', '/api/v1/admin/etablissement', j)
+    etab.assertStatus(200)
+    assert.property(etab.body().etablissement, 'adresse')
+  })
+
+  test('classes et affectations de l’année, filtre par classe', async ({ client, assert }) => {
+    const ctx = await contexte()
+    const j = await jeton(client, await creerCompte(['admin']))
+
+    const classes = await appel(client, 'get', '/api/v1/admin/classes', j)
+    classes.assertStatus(200)
+    assert.equal(classes.body().annee.id, ctx.annee.id)
+    assert.containsSubset(classes.body().classes, [{ id: ctx.classe.id, libelle: '3e A' }])
+
+    const toutes = await appel(client, 'get', '/api/v1/admin/affectations', j)
+    toutes.assertStatus(200)
+    assert.containsSubset(toutes.body().affectations, [
+      { id: ctx.affectation.id, classeId: ctx.classe.id, matiere: 'Mathématiques' },
+    ])
+    const autre = await appel(
+      client,
+      'get',
+      `/api/v1/admin/affectations?classe=${ctx.classe.id + 1000}`,
+      j
+    )
+    assert.lengthOf(autre.body().affectations, 0)
+
+    const inconnue = await appel(client, 'get', '/api/v1/admin/classes?annee=999999', j)
+    inconnue.assertStatus(404)
+  })
+
+  test('comptes paginés et recherche', async ({ client, assert }) => {
+    await creerCompte(['enseignant'], { fullName: 'Mariama Diallo' })
+    const j = await jeton(client, await creerCompte(['admin']))
+    const r = await appel(client, 'get', '/api/v1/admin/comptes?q=mariama', j)
+    r.assertStatus(200)
+    assert.lengthOf(r.body().comptes, 1)
+    assert.containsSubset(r.body().comptes[0], {
+      fullName: 'Mariama Diallo',
+      roles: ['enseignant'],
+    })
+    assert.notProperty(r.body().comptes[0], 'password')
+    assert.equal(r.body().pagination.total, 1)
+  })
+
+  test('journal (RG22) : admin et direction, pas l’enseignant', async ({ client, assert }) => {
+    const ctx = await contexte()
+    await EntreeJournal.create({
+      userId: ctx.direction.id,
+      action: 'evaluation.valider',
+      entite: 'evaluation',
+      entiteId: String(ctx.evaluation.id),
+      avant: { etat: 'soumise' },
+      apres: { etat: 'validee' },
+      ip: '127.0.0.1',
+    })
+    for (const user of [await creerCompte(['admin']), ctx.direction]) {
+      const r = await appel(client, 'get', '/api/v1/admin/journal', await jeton(client, user))
+      r.assertStatus(200)
+      assert.containsSubset(r.body().entrees, [
+        {
+          action: 'evaluation.valider',
+          avant: { etat: 'soumise' },
+          auteur: ctx.direction.fullName,
+        },
+      ])
+    }
+    const refus = await appel(
+      client,
+      'get',
+      '/api/v1/admin/journal',
+      await jeton(client, ctx.enseignant)
+    )
+    refus.assertStatus(403)
+  })
+
+  test('lecture seule : aucune modification possible par l’API', async ({ client, assert }) => {
+    const ctx = await contexte()
+    const j = await jeton(client, await creerCompte(['admin']))
+    const cas: Array<[string, string]> = [
+      ['post', `/api/v1/admin/annees/${ctx.annee.id}/cloturer`],
+      ['put', '/api/v1/admin/coefficients'],
+      ['post', '/api/v1/admin/comptes'],
+      ['put', `/api/v1/admin/comptes/${ctx.enseignant.id}/roles`],
+    ]
+    for (const [methode, url] of cas) {
+      const r = await appel(client, methode, url, j, {})
+      assert.equal(r.status(), 404, url)
+      assert.equal(r.body().code, 'E_ROUTE_INTROUVABLE')
+    }
+    await ctx.annee.refresh()
+    assert.equal(ctx.annee.etat, 'active')
+  })
+
+  test('documents : seuls les siens, téléchargement d’un autre refusé', async ({
+    client,
+    assert,
+  }) => {
+    const admin = await creerCompte(['admin'])
+    const autre = await creerCompte(['secretariat'])
+    const fichier = (userId: number) =>
+      FichierGenere.create({
+        userId,
+        type: 'registre',
+        libelle: 'Registre des inscriptions · 2026-2027',
+        format: 'pdf',
+        parametres: {},
+        etat: 'en_attente',
+      })
+    const mien = await fichier(admin.id)
+    const sien = await fichier(autre.id)
+    const j = await jeton(client, admin)
+
+    const liste = await appel(client, 'get', '/api/v1/documents', j)
+    liste.assertStatus(200)
+    assert.deepEqual(
+      liste.body().documents.map((d: { id: number }) => d.id),
+      [mien.id]
+    )
+    const refus = await appel(client, 'get', `/api/v1/documents/${sien.id}`, j)
+    refus.assertStatus(403)
+    const pasPret = await appel(client, 'get', `/api/v1/documents/${mien.id}`, j)
+    pasPret.assertStatus(404)
   })
 })

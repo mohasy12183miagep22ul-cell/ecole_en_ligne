@@ -55,11 +55,13 @@ export default class User extends compose(UserSchema, withAuthFinder(hash)) {
   }
 
   /**
-   * Espaces ouverts dans l'application mobile, par ordre de priorité. Le
-   * paramétrage (administrateur) et la scolarité restent sur le web.
+   * Espaces ouverts dans l'application mobile, par ordre de priorité.
+   * L'administrateur y consulte seulement : son paramétrage et la scolarité
+   * se modifient sur le web.
    */
   get espacesMobiles() {
-    const espaces: Array<'direction' | 'enseignant' | 'portail'> = []
+    const espaces: Array<'admin' | 'direction' | 'enseignant' | 'portail'> = []
+    if (this.aLeRole('admin')) espaces.push('admin')
     if (this.aLeRole('direction')) espaces.push('direction')
     if (this.aLeRole('enseignant', 'professeur_principal')) espaces.push('enseignant')
     if (this.aLeRole('tuteur')) espaces.push('portail')

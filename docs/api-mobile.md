@@ -17,6 +17,7 @@ complète des points d'accès, des réponses et des erreurs est dans ce projet-l
 | Émission et révocation des jetons | `app/services/jeton_service.ts` |
 | Second facteur sans session (défis) | `app/services/code_verification_service.ts`, table `defis_connexion` |
 | Portail famille (RG20, identifiants opaques) | `app/services/portail_service.ts`, `ElevePolicy.consulterFamille` |
+| Administrateur, lecture seule (`/admin/*`, `/admin/journal`, `/documents`) | `app/controllers/api/admin_controller.ts` |
 | Tests | `tests/functional/api_mobile.spec.ts` |
 
 ## Choix
@@ -34,6 +35,13 @@ complète des points d'accès, des réponses et des erreurs est dans ce projet-l
 - **Portail** : les élèves sont désignés par un identifiant chiffré (`encryption`, but
   `portail_eleve`), jamais par leur identifiant séquentiel. Non rattaché ou identifiant forgé :
   même 404. Aucune note ni aucun bulletin n'est exposé avant le lot des bulletins (RG18).
+- **Administrateur : consultation seule.** `GET /admin/accueil`, `annees`, `structure`,
+  `etablissement`, `classes` et `affectations` (`?annee=`, `?classe=`), `comptes` (`?page=`, `?q=`),
+  `admin/journal` (aussi ouvert à la direction) et `GET /documents` avec téléchargement
+  `GET /documents/:id` (action web réutilisée, auteur seul). Aucune route mutante : clôture et
+  activation d'année, coefficients, classes, affectations, comptes et rôles restent sur le web.
+  Compteurs du tableau de bord et lecture du journal sont passés dans `StructureService.compteurs`
+  et `JournalService.lister`, partagés avec le web.
 - Le code web lit désormais explicitement le garde `web` (`auth.use('web')`), car `ctx.auth.user`
   peut aussi désigner un compte authentifié par jeton.
 

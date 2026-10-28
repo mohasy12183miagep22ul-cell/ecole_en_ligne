@@ -1,12 +1,7 @@
-import db from '@adonisjs/lucid/services/db'
 import { gererStructure } from '#abilities/main'
+import StructureService from '#services/structure_service'
 import AnneeScolaireService from '#services/annee_scolaire_service'
 import type { HttpContext } from '@adonisjs/core/http'
-
-const compter = async (requete: Promise<Array<{ total: string | number }>>) => {
-  const [ligne] = await requete
-  return Number(ligne?.total ?? 0)
-}
 
 export default class AdminAccueilController {
   async index({ inertia, bouncer, anneeActive }: HttpContext) {
@@ -16,18 +11,14 @@ export default class AdminAccueilController {
     )
     const active = annees.find((a) => a.id === anneeActive?.id)
 
-    const [niveaux, matieres, comptes] = await Promise.all([
-      compter(db.from('niveaux').whereNull('deleted_at').count('* as total')),
-      compter(db.from('matieres').whereNull('deleted_at').count('* as total')),
-      compter(db.from('users').whereNull('deleted_at').where('actif', true).count('* as total')),
-    ])
+    const { niveaux, matieres, comptesActifs } = await StructureService.compteurs()
 
     return inertia.render('admin/accueil', {
       statistiques: {
         niveaux,
         classes: active ? Number(active.$extras.classes_count) : 0,
         matieres,
-        comptesActifs: comptes,
+        comptesActifs,
       },
       annees: annees.map((a) => ({
         id: a.id,

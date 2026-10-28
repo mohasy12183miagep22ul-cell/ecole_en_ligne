@@ -149,6 +149,8 @@ export interface ApiDefinition {
     journal: typeof routes['admin.journal']
   }
   api: {
+    sante: typeof routes['api.sante']
+    health: typeof routes['api.health']
     auth: {
       connexion: typeof routes['api.auth.connexion']
       verification: typeof routes['api.auth.verification'] & {
@@ -191,6 +193,20 @@ export interface ApiDefinition {
         valider: typeof routes['api.direction.inscriptions.valider']
         refuser: typeof routes['api.direction.inscriptions.refuser']
       }
+    }
+    admin: {
+      accueil: typeof routes['api.admin.accueil']
+      annees: typeof routes['api.admin.annees']
+      structure: typeof routes['api.admin.structure']
+      etablissement: typeof routes['api.admin.etablissement']
+      classes: typeof routes['api.admin.classes']
+      affectations: typeof routes['api.admin.affectations']
+      comptes: typeof routes['api.admin.comptes']
+      journal: typeof routes['api.admin.journal']
+    }
+    documents: {
+      index: typeof routes['api.documents.index']
+      telecharger: typeof routes['api.documents.telecharger']
     }
     portail: {
       enfants: typeof routes['api.portail.enfants']

@@ -20,6 +20,8 @@ const Appreciations = () => import('#controllers/api/appreciations_controller')
 const Direction = () => import('#controllers/api/direction_controller')
 const Portail = () => import('#controllers/api/portail_controller')
 const Sante = () => import('#controllers/api/sante_controller')
+const Admin = () => import('#controllers/api/admin_controller')
+const DocumentsGeneres = () => import('#controllers/documents_generes_controller')
 
 router
   .group(() => {
@@ -90,6 +92,39 @@ router
       .as('direction')
       .where('id', router.matchers.number())
       .use(middleware.api({ roles: ['direction'] }))
+
+    // Administrateur : consultation seule ; le paramétrage et les comptes
+    // se modifient sur le web.
+    router
+      .group(() => {
+        router.get('accueil', [Admin, 'accueil']).as('accueil')
+        router.get('annees', [Admin, 'annees']).as('annees')
+        router.get('structure', [Admin, 'structure']).as('structure')
+        router.get('etablissement', [Admin, 'etablissement']).as('etablissement')
+        router.get('classes', [Admin, 'classes']).as('classes')
+        router.get('affectations', [Admin, 'affectations']).as('affectations')
+        router.get('comptes', [Admin, 'comptes']).as('comptes')
+      })
+      .prefix('admin')
+      .as('admin')
+      .use(middleware.api({ roles: ['admin'] }))
+
+    router
+      .get('admin/journal', [Admin, 'journal'])
+      .as('admin.journal')
+      .use(middleware.api({ roles: ['admin', 'direction'] }))
+
+    // Le téléchargement reprend l'action web : policy (auteur seul), fichier
+    // servi depuis le stockage, jamais par une URL publique.
+    router
+      .group(() => {
+        router.get('/', [Admin, 'documents']).as('index')
+        router.get(':id', [DocumentsGeneres, 'telecharger']).as('telecharger')
+      })
+      .prefix('documents')
+      .as('documents')
+      .where('id', router.matchers.number())
+      .use(middleware.api({ roles: ['secretariat', 'direction', 'admin'] }))
 
     router
       .group(() => {

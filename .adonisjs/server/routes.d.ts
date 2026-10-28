@@ -99,6 +99,8 @@ export type ScannedRoutes = {
     'admin.comptes.roles': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.comptes.activation': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.journal': { paramsTuple?: []; params?: {} }
+    'api.sante': { paramsTuple?: []; params?: {} }
+    'api.health': { paramsTuple?: []; params?: {} }
     'api.auth.connexion': { paramsTuple?: []; params?: {} }
     'api.auth.verification': { paramsTuple?: []; params?: {} }
     'api.auth.verification.renvoyer': { paramsTuple?: []; params?: {} }
@@ -128,6 +130,16 @@ export type ScannedRoutes = {
     'api.direction.inscriptions': { paramsTuple?: []; params?: {} }
     'api.direction.inscriptions.valider': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.direction.inscriptions.refuser': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'api.admin.accueil': { paramsTuple?: []; params?: {} }
+    'api.admin.annees': { paramsTuple?: []; params?: {} }
+    'api.admin.structure': { paramsTuple?: []; params?: {} }
+    'api.admin.etablissement': { paramsTuple?: []; params?: {} }
+    'api.admin.classes': { paramsTuple?: []; params?: {} }
+    'api.admin.affectations': { paramsTuple?: []; params?: {} }
+    'api.admin.comptes': { paramsTuple?: []; params?: {} }
+    'api.admin.journal': { paramsTuple?: []; params?: {} }
+    'api.documents.index': { paramsTuple?: []; params?: {} }
+    'api.documents.telecharger': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.portail.enfants': { paramsTuple?: []; params?: {} }
     'api.portail.enfant': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
@@ -175,6 +187,8 @@ export type ScannedRoutes = {
     'admin.affectations': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.journal': { paramsTuple?: []; params?: {} }
+    'api.sante': { paramsTuple?: []; params?: {} }
+    'api.health': { paramsTuple?: []; params?: {} }
     'api.moi': { paramsTuple?: []; params?: {} }
     'api.enseignant.affectations': { paramsTuple?: []; params?: {} }
     'api.enseignant.periodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -187,6 +201,16 @@ export type ScannedRoutes = {
     'api.direction.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.direction.suivi': { paramsTuple?: []; params?: {} }
     'api.direction.inscriptions': { paramsTuple?: []; params?: {} }
+    'api.admin.accueil': { paramsTuple?: []; params?: {} }
+    'api.admin.annees': { paramsTuple?: []; params?: {} }
+    'api.admin.structure': { paramsTuple?: []; params?: {} }
+    'api.admin.etablissement': { paramsTuple?: []; params?: {} }
+    'api.admin.classes': { paramsTuple?: []; params?: {} }
+    'api.admin.affectations': { paramsTuple?: []; params?: {} }
+    'api.admin.comptes': { paramsTuple?: []; params?: {} }
+    'api.admin.journal': { paramsTuple?: []; params?: {} }
+    'api.documents.index': { paramsTuple?: []; params?: {} }
+    'api.documents.telecharger': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.portail.enfants': { paramsTuple?: []; params?: {} }
     'api.portail.enfant': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }
@@ -234,6 +258,8 @@ export type ScannedRoutes = {
     'admin.affectations': { paramsTuple?: []; params?: {} }
     'admin.comptes': { paramsTuple?: []; params?: {} }
     'admin.journal': { paramsTuple?: []; params?: {} }
+    'api.sante': { paramsTuple?: []; params?: {} }
+    'api.health': { paramsTuple?: []; params?: {} }
     'api.moi': { paramsTuple?: []; params?: {} }
     'api.enseignant.affectations': { paramsTuple?: []; params?: {} }
     'api.enseignant.periodes': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -246,6 +272,16 @@ export type ScannedRoutes = {
     'api.direction.evaluations.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.direction.suivi': { paramsTuple?: []; params?: {} }
     'api.direction.inscriptions': { paramsTuple?: []; params?: {} }
+    'api.admin.accueil': { paramsTuple?: []; params?: {} }
+    'api.admin.annees': { paramsTuple?: []; params?: {} }
+    'api.admin.structure': { paramsTuple?: []; params?: {} }
+    'api.admin.etablissement': { paramsTuple?: []; params?: {} }
+    'api.admin.classes': { paramsTuple?: []; params?: {} }
+    'api.admin.affectations': { paramsTuple?: []; params?: {} }
+    'api.admin.comptes': { paramsTuple?: []; params?: {} }
+    'api.admin.journal': { paramsTuple?: []; params?: {} }
+    'api.documents.index': { paramsTuple?: []; params?: {} }
+    'api.documents.telecharger': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.portail.enfants': { paramsTuple?: []; params?: {} }
     'api.portail.enfant': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'api.introuvable': { paramsTuple: [...ParamValue[]]; params: {'*': ParamValue[]} }

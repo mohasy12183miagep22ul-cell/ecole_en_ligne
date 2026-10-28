@@ -20,6 +20,20 @@ export default class StructureService {
     return Matiere.query().whereNull('deleted_at').orderBy('libelle')
   }
 
+  /** Compteurs du tableau de bord de l'administrateur (web et mobile). */
+  static async compteurs() {
+    const compter = async (requete: Promise<Array<{ total: string | number }>>) => {
+      const [ligne] = await requete
+      return Number(ligne?.total ?? 0)
+    }
+    const [niveaux, matieres, comptesActifs] = await Promise.all([
+      compter(db.from('niveaux').whereNull('deleted_at').count('* as total')),
+      compter(db.from('matieres').whereNull('deleted_at').count('* as total')),
+      compter(db.from('users').whereNull('deleted_at').where('actif', true).count('* as total')),
+    ])
+    return { niveaux, matieres, comptesActifs }
+  }
+
   /** Programme complet : une ligne par couple niveau + matière actif. */
   static programme() {
     return NiveauMatiere.query().whereNull('deleted_at')

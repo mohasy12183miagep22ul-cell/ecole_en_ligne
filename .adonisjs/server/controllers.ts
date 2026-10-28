@@ -8,6 +8,7 @@ export const controllers = {
   Affectations: () => import('#controllers/affectations_controller'),
   Annees: () => import('#controllers/annees_controller'),
   api: {
+    Admin: () => import('#controllers/api/admin_controller'),
     Appreciations: () => import('#controllers/api/appreciations_controller'),
     Auth: () => import('#controllers/api/auth_controller'),
     Direction: () => import('#controllers/api/direction_controller'),

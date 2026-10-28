@@ -12,12 +12,24 @@ export type Trace = {
   ip?: string | null
 }
 
+/** Taille d'une page du journal (pagination serveur). */
+const ENTREES_PAR_PAGE = 50
+
 /**
  * Journal des opérations sensibles (RG22). Seul point d'écriture du journal ;
  * accepte la transaction de l'opération journalisée pour que l'entrée et
  * l'opération réussissent ou échouent ensemble.
  */
 export default class JournalService {
+  /** Lecture paginée, du plus récent au plus ancien, avec le nom de l'auteur. */
+  static lister(page: number) {
+    return EntreeJournal.query()
+      .leftJoin('users', 'users.id', 'journal.user_id')
+      .select('journal.*', 'users.full_name as auteur')
+      .orderBy('journal.id', 'desc')
+      .paginate(page, ENTREES_PAR_PAGE)
+  }
+
   static async enregistrer(trace: Trace, trx?: TransactionClientContract) {
     return EntreeJournal.create(
       {

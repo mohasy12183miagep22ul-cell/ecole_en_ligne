@@ -1,13 +1,10 @@
-import EntreeJournal from '#models/entree_journal'
 import { consulterJournal } from '#abilities/main'
+import JournalService from '#services/journal_service'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { JSONDataTypes } from '@adonisjs/core/types/transformers'
 
 /** Valeurs avant/après stockées en jsonb : renvoyées telles quelles à la page. */
 type Valeurs = { [cle: string]: JSONDataTypes } | null
-
-/** Taille d'une page du journal (pagination serveur). */
-const ENTREES_PAR_PAGE = 50
 
 /**
  * Journal d'activité (RG22) : lecture seule, réservé à la direction et à
@@ -18,11 +15,7 @@ export default class JournalController {
     await bouncer.authorize(consulterJournal)
     const page = Math.max(1, Number(request.input('page', 1)) || 1)
 
-    const resultat = await EntreeJournal.query()
-      .leftJoin('users', 'users.id', 'journal.user_id')
-      .select('journal.*', 'users.full_name as auteur')
-      .orderBy('journal.id', 'desc')
-      .paginate(page, ENTREES_PAR_PAGE)
+    const resultat = await JournalService.lister(page)
     const meta = resultat.getMeta()
 
     return inertia.render('admin/journal', {

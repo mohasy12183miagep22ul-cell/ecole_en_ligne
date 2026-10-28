@@ -1242,6 +1242,32 @@ export interface Registry {
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/journal_controller').default['index']>>>
     }
   }
+  'api.sante': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/sante'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/sante_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/sante_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/sante_controller').default['show']>>>
+    }
+  }
+  'api.health': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/health'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/sante_controller').default['show']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/sante_controller').default['show']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/sante_controller').default['show']>>>
+    }
+  }
   'api.auth.connexion': {
     methods: ["POST"]
     pattern: '/api/v1/auth/connexion'
@@ -1617,6 +1643,136 @@ export interface Registry {
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/direction_controller').default['refuserInscription']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/direction_controller').default['refuserInscription']>>> | { status: 422; response: { errors: SimpleError[] } }
       rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/direction_controller').default['refuserInscription']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
+  'api.admin.accueil': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/accueil'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['accueil']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['accueil']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['accueil']>>>
+    }
+  }
+  'api.admin.annees': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/annees'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['annees']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['annees']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['annees']>>>
+    }
+  }
+  'api.admin.structure': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/structure'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['structure']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['structure']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['structure']>>>
+    }
+  }
+  'api.admin.etablissement': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/etablissement'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['etablissement']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['etablissement']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['etablissement']>>>
+    }
+  }
+  'api.admin.classes': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/classes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['classes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['classes']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['classes']>>>
+    }
+  }
+  'api.admin.affectations': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/affectations'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['affectations']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['affectations']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['affectations']>>>
+    }
+  }
+  'api.admin.comptes': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/comptes'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['comptes']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['comptes']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['comptes']>>>
+    }
+  }
+  'api.admin.journal': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/admin/journal'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['journal']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['journal']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['journal']>>>
+    }
+  }
+  'api.documents.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/documents'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['documents']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['documents']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/api/admin_controller').default['documents']>>>
+    }
+  }
+  'api.documents.telecharger': {
+    methods: ["GET","HEAD"]
+    pattern: '/api/v1/documents/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['telecharger']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['telecharger']>>>
+      rawResponse: ExtractRawResponse<Awaited<ReturnType<import('#controllers/documents_generes_controller').default['telecharger']>>>
     }
   }
   'api.portail.enfants': {
